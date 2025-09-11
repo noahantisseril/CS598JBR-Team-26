@@ -2,9 +2,9 @@
 
 ## Group members
 - Noah Antisseril, noahsa2
-- [Team member2], [NetID]
-- [Team member3], [NetID]
-- [Team member4], [NetID]
+- Vishal Ramvelu, ramvelu2
+- Madhav Parthasarathy, madhavp2
+- Becky Blake, ryblake2
 
 ## Link of Google Colab Notebook
 - MP1 - [link](URL) (please add the link here)
