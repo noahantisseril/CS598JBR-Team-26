@@ -1,7 +1,7 @@
 # CS598JBR-Team-0
 
 ## Group members
-- [Team member1], [NetID]
+- Noah Antisseril, noahsa2
 - [Team member2], [NetID]
 - [Team member3], [NetID]
 - [Team member4], [NetID]
