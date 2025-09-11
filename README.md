@@ -7,6 +7,6 @@
 - Becky Blake, ryblake2
 
 ## Link of Google Colab Notebook
-- MP1 - [link](URL) (please add the link here)
+- MP1 - [link](https://colab.research.google.com/drive/12hIVIYQ94-pJX2qGWTv6u6FeT9v3j307?usp=sharing) (please add the link here)
 - MP2 - [link](URL) (please add the link here)
 - MP3 - [link](URL) (please add the link here)
