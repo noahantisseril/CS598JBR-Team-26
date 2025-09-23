@@ -19,6 +19,7 @@ def delete_extra_functions(response):
     for line in response.split('\n'):
         if 'def' in line:
             response = response.split(line)[0]
+            break
     
     return response
 
