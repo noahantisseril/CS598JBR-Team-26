@@ -12,17 +12,14 @@ def save_file(content, file_path):
     with open(file_path, 'w') as file:
         file.write(content)
 
-def fix_triple_quotes(response):
+def delete_extra_functions(response):
     """
-    Fix triple quotes in the response
+    Delete extra functions in the response
     """
-    count = 0
     for line in response.split('\n'):
-        if '\'\'\'' in line:
-            count += 1
+        if 'def' in line:
+            response = response.split(line)[0]
     
-    if count != 0:
-        response += "\n    \'\'\'\n    pass"
     return response
 
 def prompt_model(dataset, model_name = "deepseek-ai/deepseek-coder-6.7b-base", quantization = True):
