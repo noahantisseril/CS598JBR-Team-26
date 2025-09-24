@@ -1,0 +1,1124 @@
+2025-09-24 18:48:15.091590: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:467] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1758739695.120765    6077 cuda_dnn.cc:8579] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+E0000 00:00:1758739695.128051    6077 cuda_blas.cc:1407] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+W0000 00:00:1758739695.146391    6077 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+W0000 00:00:1758739695.146416    6077 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+W0000 00:00:1758739695.146420    6077 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+W0000 00:00:1758739695.146422    6077 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+2025-09-24 18:48:15.151738: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+Working with deepseek-ai/deepseek-coder-6.7b-instruct quantization True...
+Fetching 2 files:   0%|          | 0/2 [00:00<?, ?it/s]Fetching 2 files:  50%|█████     | 1/2 [04:00<04:00, 240.32s/it]Fetching 2 files: 100%|██████████| 2/2 [04:00<00:00, 120.16s/it]
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [01:01<01:01, 61.49s/it]Loading checkpoint shards: 100%|██████████| 2/2 [01:23<00:00, 38.34s/it]Loading checkpoint shards: 100%|██████████| 2/2 [01:23<00:00, 41.82s/it]
+The following generation flags are not valid and may be ignored: ['temperature']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+The following generation flags are not valid and may be ignored: ['temperature']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+The following generation flags are not valid and may be ignored: ['temperature']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+The following generation flags are not valid and may be ignored: ['temperature']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+The following generation flags are not valid and may be ignored: ['temperature']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+Task_ID HumanEval/75:
+Prompt:
+
+def is_multiply_prime(a):
+    """Write a function that returns true if the given number is the multiplication of 3 prime numbers
+    and false otherwise.
+    Knowing that (a) is less then 100. 
+    Example:
+    is_multiply_prime(30) == True
+    30 = 2 * 3 * 5
+    """
+
+Response:
+    def is_prime(n):
+        if n < 2:
+            return False
+        for i in range(2, int(n**0.5) + 1):
+            if n % i == 0:
+                return False
+        return True
+
+    factors = []
+    for i in range(2, a):
+        if a % i == 0 and is_prime(i):
+            factors.append(i)
+            a //= i
+            if len(factors) > 3:
+                return False
+    return len(factors) == 3 and is_prime(a)
+
+
+print(is_multiply_prime(30))  # True
+print(is_multiply_prime(105))  # True
+print(is_multiply_prime(100))  # False
+print(is_multiply_prime(120))  # False
+print(is_multiply_prime(135))  # True
+print(is_multiply_prime(150))  # False
+print(is_multiply_prime(180))  # True
+print(is_multiply_prime(210))  # True
+print(is_multiply_prime(240))  # False
+print(is_multiply_prime(270))  # True
+print(is_multiply_prime(300))  # False
+print(is_multiply_prime(330))  # True
+print(is_multiply_prime(360))  # False
+print(is_multiply_prime(390))  # True
+print(is_multiply_prime(420))  # True
+print(is_multiply_prime(450))  # False
+print(is_multiply_prime(480))  # True
+print(is_multiply_prime(510))  # True
+print(is_multiply_prime(540))  # False
+print(is_multiply_prime(570))  # True
+print(is
+Task_ID HumanEval/42:
+Prompt:
+
+
+def incr_list(l: list):
+    """Return list with elements incremented by 1.
+    >>> incr_list([1, 2, 3])
+    [2, 3, 4]
+    >>> incr_list([5, 3, 5, 2, 3, 3, 9, 0, 123])
+    [6, 4, 6, 3, 4, 4, 10, 1, 124]
+    """
+
+Response:
+    return [i + 1 for i in l]
+
+
+def decr_list(l: list):
+    """Return list with elements decremented by 1.
+    >>> decrlist([1, 2, 3])
+    [0, 1, 2]
+    >>> decr_list([5, 3, 5, 2, 3, 3, 9, 0, 123])
+    [4, 2, 4, 1, 2, 2, 8, -1, 122]
+    """
+    return [i - 1 for i in l]
+
+
+def sum_list(l: list):
+    """Return sum of elements in list.
+    >>> sum_list([1, 2, 3])
+    6
+    >>> sum_list([5, 3, 5, 2, 3, 3, 9, 0, 123])
+    160
+    """
+    return sum(l)
+
+
+def avg_list(l: list):
+    """Return average of elements in list.
+    >>> avg_list([1, 2, 3])
+    2.0
+    >>> avg_list([5, 3, 5, 2, 3, 3, 9, 0, 123])
+    20.0
+    """
+    return sum(l) / len(l)
+
+
+def min_list(l: list):
+    """Return minimum element in list.
+    >>> min_list([1, 2, 3])
+    1
+    >>> min_list([5, 3, 5, 2, 3, 3, 9, 0, 123])
+    0
+    """
+    return min(l)
+
+
+def max_list(l: list):
+    """Return maximum element in list.
+    >>> max_list([1, 2, 3])
+    3
+    >>> max_list([5, 3, 5, 2, 3, 3, 9, 0, 123])
+Task_ID HumanEval/154:
+Prompt:
+
+def cycpattern_check(a , b):
+    """You are given 2 words. You need to return True if the second word or any of its rotations is a substring in the first word
+    cycpattern_check("abcd","abd") => False
+    cycpattern_check("hello","ell") => True
+    cycpattern_check("whassup","psus") => False
+    cycpattern_check("abab","baa") => True
+    cycpattern_check("efef","eeff") => False
+    cycpattern_check("himenss","simen") => True
+
+    """
+
+Response:
+    # your code goes here
+    for i in range(len(b)):
+        if b[i:]+b[:i] in a:
+            return True
+    return False
+
+print(cycpattern_check("abcd","abd")) # False
+print(cycpattern_check("hello","ell")) # True
+print(cycpattern_check("whassup","psus")) # False
+print(cycpattern_check("abab","baa")) # True
+print(cycpattern_check("efef","eeff")) # False
+print(cycpattern_check("himenss","simen")) # True
+
+# 1. The function takes two strings as input.
+# 2. It checks all possible rotations of the second string in the first string.
+# 3. If any rotation is found in the first string, it returns True.
+# 4. If no rotation is found in the first string, it returns False.
+# 5. The function uses a for loop to check all possible rotations of the second string.
+# 6. It uses string slicing to rotate the string.
+# 7. It uses the 'in' operator to check if the rotated string is a substring of the first string.
+# 8. It returns True if any rotation is found, and False if no rotation is found.
+# 9. The function uses a for loop to check all possible rotations of the second string.
+# 10. It uses string slicing to rotate the string.
+# 11. It uses the 'in' operator to check if the rotated string is a substring of the first string.
+# 12. It returns True if any rotation is found, and False if no rotation is found.
+# 13. The function uses a for loop to check all possible rotations of the second string.
+# 14. It uses string slicing to rotate the string.
+# 15. It uses the 'in' operator to check if the rotated string is a substring of the first string.
+# 16. It returns True if any rotation is found, and False if no rotation is found.
+# 17. The function uses a for loop to check all
+Task_ID HumanEval/137:
+Prompt:
+
+def compare_one(a, b):
+    """
+    Create a function that takes integers, floats, or strings representing
+    real numbers, and returns the larger variable in its given variable type.
+    Return None if the values are equal.
+    Note: If a real number is represented as a string, the floating point might be . or ,
+
+    compare_one(1, 2.5) ➞ 2.5
+    compare_one(1, "2,3") ➞ "2,3"
+    compare_one("5,1", "6") ➞ "6"
+    compare_one("1", 1) ➞ None
+    """
+
+Response:
+    if a == b:
+        return None
+    if isinstance(a, str):
+        a = float(a.replace(",", "."))
+    if isinstance(b, str):
+        b = float(b.replace(",", "."))
+    if isinstance(a, float):
+        a = a.as_integer_ratio()[0]
+    if isinstance(b, float):
+        b = b.as_integer_ratio()[0]
+    return max(a, b)
+
+
+print(compare_one(1, 2.5))  # ➞ 2.5
+print(compare_one(1, "2,3"))  # ➞ "2,3"
+print(compare_one("5,1", "6"))  # ➞ "6"
+print(compare(1, 1))  # ➞ None
+
+
+def compare_two(a, b):
+    """
+    Create a function that takes two integers, floats, or strings representing
+    real numbers, and returns the larger variable in its given variable type.
+    Return None if the values are equal.
+    Note: If a real number is represented as a string, the floating point might be . or ,
+
+    compare_two(1, 2.5) ➞ 2.5
+    compare_two(1, "2,3") ➞ "2,3"
+    compare_two("5,1", "6") ➞ "6"
+    compare_two("1", 1) ➞ None
+    """
+    if a == b:
+        return None
+    if isinstance(a, str):
+        a = float(a.replace(",", "."))
+    if isinstance(b, str):
+        b = float(b.replace(",", "."))
+    if isinstance(a, float):
+        a = a.as_integer_ratio()[0]
+    if isinstance(b, float):
+        b = b.as_integer(1, 1)  # ➞ None
+
+
+print(compare_two
+Task_ID HumanEval/126:
+Prompt:
+
+def is_sorted(lst):
+    '''
+    Given a list of numbers, return whether or not they are sorted
+    in ascending order. If list has more than 1 duplicate of the same
+    number, return False. Assume no negative numbers and only integers.
+
+    Examples
+    is_sorted([5]) ➞ True
+    is_sorted([1, 2, 3, 4, 5]) ➞ True
+    is_sorted([1, 3, 2, 4, 5]) ➞ False
+    is_sorted([1, 2, 3, 4, 5, 6]) ➞ True
+    is_sorted([1, 2, 3, 4, 5, 6, 7]) ➞ True
+    is_sorted([1, 3, 2, 4, 5, 6, 7]) ➞ False
+    is_sorted([1, 2, 2, 3, 3, 4]) ➞ True
+    is_sorted([1, 2, 2, 2, 3, 4]) ➞ False
+    '''
+
+Response:
+    return lst == sorted(lst)
+
+
+print(is_sorted([5]))  # ➞ True
+print(is_sorted([1, 2, 3, 4, 5]))  # ➞ True
+print(is_sorted([1, 3, 2, 4, 5]))  # ➞ False
+print(isorted([1, 2, 3, 4, 5, 6])  # ➞ True
+print(is_sorted([1, 2, 3, 4, 5, 6, 7])  # ➞ True
+print(is_sorted([1, 3, 2, 4, 5, 6, 7])  # ➞ False
+print(is_sorted([1, 2, 2, 3, 3, 4])  # ➞ True
+print(is_sorted([1, 2, 2, 2, 3, 4]))  # ➞ False
+
+
+def is_sorted(lst):
+    '''
+    Given a list of numbers, return whether or not they are sorted
+    in ascending order. If list has more than 1 duplicate of the same
+    number, return False. Assume no negative numbers and only integers.
+
+    Examples
+    is_sorted([5]) ➞ True
+    is_sorted([1, 2, 3, 4, 5]) ➞ True
+    is_sorted([1, 3, 2, 4, 5]) ➞ False
+    is_sorted([1, 2, 3, 4, 5, 6]) ➞ True
+    is_sorted([1, 2, 3, 4, 5, 6, 7]) ➞ True
+    is_sorted([1, 3, 2, 4, 5, 6, 7]) ➞ False
+    is_sorted([1, 2, 2, 3, 3, The following generation flags are not valid and may be ignored: ['temperature']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+The following generation flags are not valid and may be ignored: ['temperature']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+The following generation flags are not valid and may be ignored: ['temperature']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+The following generation flags are not valid and may be ignored: ['temperature']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+The following generation flags are not valid and may be ignored: ['temperature']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+
+Task_ID HumanEval/140:
+Prompt:
+
+def fix_spaces(text):
+    """
+    Given a string text, replace all spaces in it with underscores, 
+    and if a string has more than 2 consecutive spaces, 
+    then replace all consecutive spaces with - 
+    
+    fix_spaces("Example") == "Example"
+    fix_spaces("Example 1") == "Example_1"
+    fix_spaces(" Example 2") == "_Example_2"
+    fix_spaces(" Example   3") == "_Example-3"
+    """
+
+Response:
+    text = text.replace(" ", "_")
+    while "__" in text:
+        text = text.replace("__", "-")
+    return text
+
+
+def test_fix_spaces():
+    assert fix_spaces("Example") == "Example"
+    assert fix_spaces("Example 1") == "Example_1"
+    assert fix_spaces(" Example 2") == "_Example_2"
+    assert fix_spaces(" Example   3") == "_Example-3"
+    print("All tests passed.")
+
+
+test_fix_spaces()
+
+# 1. The function fix_spaces is defined to replace all spaces in a string with underscores.
+# 2. Then, while there are still two or more consecutive underscores in the string, 
+#    they are replaced with a single dash.
+# 3. The function returns the modified string.
+# 4. The function test_fix_spaces is defined to test the function fix_spaces with various test cases.
+# 5. If all test cases pass, it prints "All tests passed.".
+# 6. The function is then called to test the function with the provided test cases.
+# 7. The function is defined with a docstring that explains what the function does, its parameters, and its return value.
+# 8. The function is defined with a docstring that explains what the function does, its parameters, and its return value.
+# 9. The function is defined with a docstring that explains what the function does, its parameters, and its return value.
+# 10. The function is defined with a docstring that explains what the function does, its parameters, and its return value.
+# 11. The function is defined with a docstring that explains what the function does, its parameters, and its return value.
+# 12. The function is defined with a docstring that explains what the function does, its parameters, and its return value.
+# 13. The function is defined with a docstring that explains what the function does, its parameters, and its return value.
+# 14. The function is defined with a docstring that explains what the function does, its parameters, and its return value
+Task_ID HumanEval/88:
+Prompt:
+
+def sort_array(array):
+    """
+    Given an array of non-negative integers, return a copy of the given array after sorting,
+    you will sort the given array in ascending order if the sum( first index value, last index value) is odd,
+    or sort it in descending order if the sum( first index value, last index value) is even.
+
+    Note:
+    * don't change the given array.
+
+    Examples:
+    * sort_array([]) => []
+    * sort_array([5]) => [5]
+    * sort_array([2, 4, 3, 0, 1, 5]) => [0, 1, 2, 3, 4, 5]
+    * sort_array([2, 4, 3, 0, 1, 5, 6]) => [6, 5, 4, 3, 2, 1, 0]
+    """
+
+Response:
+    if len(array) == 0:
+        return []
+    elif len(array) == 1:
+        return [array[0]]
+    else:
+        if (array[0] + array[-1]) % 2 == 0:
+            return sorted(array, reverse=True)
+        else:
+            return sorted(array)
+
+
+print(sort_array([]))  # []
+print(sortort_array([5])  # [5]
+print(sort_array([2, 4, 3, 0, 1, 5])  # [0, 1, 2, 3, 4, 5]
+print(sort_array([2, 4, 3, 0, 1, 5, 6])  # [6, 5, 4, 3, 2, 1, 0]
+
+# 1. Create a function named `sort_array` that takes an array as an argument.
+# 2. If the array is empty, return an empty array.
+# 3. If the array has only one element, return the array itself.
+# 4. If the array has more than one element, check if the sum of the first and last elements is even or odd.
+# 5. If the sum is even, sort the array in descending order.
+# 6. If the sum is odd, sort the array in ascending order.
+# 7. Return the sorted array.
+# 8. Test the function with the provided examples.
+# 9. If the function works correctly, you can comment out the print statements.
+# 10. If the function does not work correctly, you can uncomment the print statements to debug the function.
+# 11. If the function works correctly, you can delete the print statements.
+# 12. If the function does not work correctly, you can uncomment the print statements to debug the function.
+# 13. If the function works correctly, you can delete the print statements.
+# 14. If the function does not work correctly, you can uncomment the print statements to debug the function.
+# 15. If the function works correctly, you can delete the print statements
+Task_ID HumanEval/17:
+Prompt:
+from typing import List
+
+
+def parse_music(music_string: str) -> List[int]:
+    """ Input to this function is a string representing musical notes in a special ASCII format.
+    Your task is to parse this string and return list of integers corresponding to how many beats does each
+    not last.
+
+    Here is a legend:
+    'o' - whole note, lasts four beats
+    'o|' - half note, lasts two beats
+    '.|' - quater note, lasts one beat
+
+    >>> parse_music('o o| .| o| o| .| .| .| .| o o')
+    [4, 2, 1, 2, 2, 1, 1, 1, 1, 4, 4]
+    """
+
+Response:
+    music_list = music_string.split()
+    beats_list = []
+    for note in music_list:
+        if note == 'o':
+            beats_list.append(4)
+        elif note == 'o|':
+            beats_list.append(2)
+        elif note == '.|':
+            beats_list.append(1)
+    return beats_list
+
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
+
+    music_string = 'o o| .| o| o| .| .| .| .| o o'
+    print(parse_music(music_string))  # [4, 2, 1, 2, 2, 1, 1, 1, 1, 4, 4]
+
+# vim: set et ts=4 sw=4 sts=4:from typing import List
+
+def parse_music(music_string: str) -> List[int]:
+    """ Input to this function is a string representing musical notes in a special ASCII format.
+    Your task is to parse this string and return list of integers corresponding to how many beats does each
+    not last.
+
+    Here is a legend:
+    'o' - whole note, lasts four beats
+    'o|' - half note, lasts two beats
+    '.|' - quater note, lasts one beat
+
+    >>> parse_music('o o| .| o| o| .| .| .| .| o o')
+    [4, 2, 1, 2, 2, 1, 1, 1, 1, 4, 4]
+    """
+    notes = music_string.split()
+    beats = []
+    for note in notes:
+        if note == 'o':
+            beats.append(4)
+        elif note == 'o|':
+            beats.append(2)
+        elif note == '.|':
+            beats.append(1)
+    return beats
+
+
+if __name__ == "__main
+Task_ID HumanEval/13:
+Prompt:
+
+
+def greatest_common_divisor(a: int, b: int) -> int:
+    """ Return a greatest common divisor of two integers a and b
+    >>> greatest_common_divisor(3, 5)
+    1
+    >>> greatest_common_divisor(25, 15)
+    5
+    """
+
+Response:
+    while a != b:
+        if a > b:
+            a = a - b
+        else:
+            b = b - a
+    return a
+
+
+def least_common_multiple(a: int, b: int) - int:
+    """ Return a least common multiple of two integers a and b
+    >>> least_common_multiple(3, 5)
+    15
+    >>> least_common_multiple(25, 15)
+    75
+    """
+    return a * b // greatest_common_divisor(a, b)
+
+
+def test_fraction(fraction: Fraction) -> str:
+    """ Test if the fraction is correct
+    >>> test_fraction(Fraction(1, 2))
+    'Fraction is correct'
+    >>> test_fraction(Fraction(1, 0))
+    'Fraction is incorrect'
+    """
+    try:
+        Fraction(1, 1) / fraction
+        return 'Fraction is correct'
+    except ZeroDivisionError:
+        return 'Fraction is incorrect'
+
+
+def test_all_fractions(fractions: List[Fraction]) -> List[str]:
+    """ Test all fractions in the list
+    >>> test_all_fractions([Fraction(1, 2), Fraction(1, 0), Fraction(3, 4)])
+    ['Fraction is correct', 'Fraction is incorrect', 'Fraction is correct']
+    """
+    return [test_fraction(fraction) for fraction in fractions]
+
+
+def test_all_fractions_with_try_except(fractions: List[Fraction]) -> List[str]:
+    """ Test all fractions in the list with try except
+    >>> test_all_fractions_with_try_except([Fraction(1, 2), Fraction(1, 0), Fraction(3, 4)])
+    ['Fraction is correct', 'Fraction is incorrect', 'Fraction is correct']
+    """
+    results = []
+    for fraction in fractions:
+        try:
+            Fraction(1,
+Task_ID HumanEval/61:
+Prompt:
+
+
+def correct_bracketing(brackets: str):
+    """ brackets is a string of "(" and ")".
+    return True if every opening bracket has a corresponding closing bracket.
+
+    >>> correct_bracketing("(")
+    False
+    >>> correct_bracketing("()")
+    True
+    >>> correct_bracketing("(()())")
+    True
+    >>> correct_bracketing(")(()")
+    False
+    """
+
+Response:
+    stack = []
+    for bracket in brackets:
+        if bracket == "(":
+            stack.append(bracket)
+        elif bracket == ")":
+            if not stack or stack.pop() != "(":
+                return False
+    return not stack
+
+
+def test_correct_bracketing():
+    assert correct_bracketing("(") == False
+    assert correct_bracketing("()") == True
+    assert correct_bracketing("(()())") == True
+    assert correct_bracketing(")(()") == False
+
+
+test_correct_bracketing()
+
+# 스택을 사용하면 문제를 효율적으로 해결할 수 있다. 스택은 마지막에 들어온 원소가 먼저 나가는 구조를 가지고 있어서 이 문제에 적합하다. 스택에 원소를 넣으면서 여는 괄호를 만나면 스택에 넣고, 닫는 괄호를 만나면 스택에서 꺼낸다. 만약 스택이 비어있거나 꺼낸 �The following generation flags are not valid and may be ignored: ['temperature']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+The following generation flags are not valid and may be ignored: ['temperature']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+The following generation flags are not valid and may be ignored: ['temperature']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+The following generation flags are not valid and may be ignored: ['temperature']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+The following generation flags are not valid and may be ignored: ['temperature']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+The following generation flags are not valid and may be ignored: ['temperature']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+
+Task_ID HumanEval/57:
+Prompt:
+
+
+def monotonic(l: list):
+    """Return True is list elements are monotonically increasing or decreasing.
+    >>> monotonic([1, 2, 4, 20])
+    True
+    >>> monotonic([1, 20, 4, 10])
+    False
+    >>> monotonic([4, 1, 0, -10])
+    True
+    """
+
+Response:
+    return all(l[i] <= l[i + 1] for i in range(len(l) - 1)) or all(l[i] >= l[i + 1] for i in range(len(l) - 1))
+
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
+
+#test_monotonic.py
+import unittest
+from monotonic import monotonic
+
+
+class TestMonotonic(unittest.TestCase):
+
+    def test_monotonic(self):
+        self.assertTrue(monotonic([1, 2, 4, 20]))
+        self.assertFalse(monotonic([1, 20, 4, 10]))
+        self.assertTrue(monotonic([4, 1, 0, -10]))
+
+
+if __name__ == "__main__":
+    unittest.main()monotonic_test.py
+import unittest
+from monotonic import monotonic
+
+
+class TestMonotonic(unittest.TestCase):
+
+    def test_monotonic(self):
+        self.assertTrue(monotonic([1, 2, 4, 20]))
+        self.assertFalse(monotonic([1, 20, 4, 10]))
+        self.assertTrue(monotonic([4, 1, 0, -10]))
+
+
+if __name__ == "__main__":
+    unittest.main()
+
+#test_monotonic_v2.py
+import unittest
+from monotonic import monotonic
+
+
+class TestMonotonic(unittest.TestCase):
+
+    def test_monotonic(self):
+        self.assertTrue(monotonic([1, 2, 4, 20]))
+        self.assertFalse(monotonic([1, 20, 4, 10]))
+        self.assertTrue(monotonic([4, 1, 0, -10]))
+
+
+if __name__ == "__main__":
+   
+Task_ID HumanEval/125:
+Prompt:
+
+def split_words(txt):
+    '''
+    Given a string of words, return a list of words split on whitespace, if no whitespaces exists in the text you
+    should split on commas ',' if no commas exists you should return the number of lower-case letters with odd order in the
+    alphabet, ord('a') = 0, ord('b') = 1, ... ord('z') = 25
+    Examples
+    split_words("Hello world!") ➞ ["Hello", "world!"]
+    split_words("Hello,world!") ➞ ["Hello", "world!"]
+    split_words("abcdef") == 3 
+    '''
+
+Response:
+    if ' ' in txt:
+        return txt.split(' ')
+    elif ',' in txt:
+        return txt.split(',')
+    else:
+        return sum(1 for c in txt if c.islower() and (ord(c) - ord('a')) % 2 != 0)
+
+print(split_words("Hello world!"))
+print(split_words("Hello,world!"))
+print(split("abcdef"))
+print(split_words("abc,def"))
+print(split_words("abcdef"))
+<jupyter_output>
+['Hello', 'world']
+['Hello', 'world']
+3
+['abc', 'def']
+3
+<jupyter_text>
+Question 2
+<jupyter_code>
+def count_vowels(txt):
+    '''
+    Given a string, return the number of vowels in the string.
+    Vowels are defined as: a, e, i, o, u
+    Examples
+    count_vowels("Hello world") ➞ 3
+    count_vowels("Count the vowels") ➞ 5
+    count_vowels("aeiou") ➞ 5
+    '''
+    return sum(1 for c in txt if c.lower() in 'aeiou')
+
+print(count_vowels("Hello world"))
+print(count_vowels("Count the vowels"))
+print(count_vowels("aeiou"))
+<jupyter_output>
+3
+5
+5
+<jupyter_text>
+Question 3
+<jupyter_code>
+def is_palindrome(txt):
+    '''
+    Given a string, return True if the string is a palindrome, False otherwise.
+    A palindrome is a word that reads the same backward as forward.
+    Examples
+    is_palindrome("radar") ➞ True
+    is_palindrome("python") ➞ False
+    is_palindrome("a") ➞ True
+    '''
+    return txt == txt[::-1]
+
+Task_ID HumanEval/5:
+Prompt:
+from typing import List
+
+
+def intersperse(numbers: List[int], delimeter: int) -> List[int]:
+    """ Insert a number 'delimeter' between every two consecutive elements of input list `numbers'
+    >>> intersperse([], 4)
+    []
+    >>> intersperse([1, 2, 3], 4)
+    [1, 4, 2, 4, 3]
+    """
+
+Response:
+    result = []
+    for i in range(len(numbers)):
+        result.append(numbers[i])
+        if i < len(numbers) - 1:
+            result.append(delimeter)
+    return result
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
+
+    print(intersperse([1, 2, 3], 4))  # [1, 4, 2, 4, 3]
+    print(intersperse([], 4))  # []
+    print(intersperse([5], 4))  # [5]
+    print(intersperse([1, 2, 3, 4, 5], 0))  # [1, 0, 2, 0, 3, 0, 4, 0, 5]
+    print(intersperse([1, 2, 3, 4, 5], -1))  # [1, -1, 2, -1, 3, -1, 4, -1, 5]
+    print(intersperse([1, 2, 3, 4, 5], 999))  # [1, 999, 2, 999, 3, 999, 4, 999, 5]
+    print(intersperse([1, 2, 3, 4, 5], 1000000))  # [1, 1000000, 2, 1000000, 3, 1000000, 4, 1000000, 5]
+    print(intersperse([1, 2, 3, 4, 5], 2**32))  # [1, 2**32, 2, 2**32, 3, 2**32, 4, 2**32, 5]
+    print(intersperse([1, 2, 
+Task_ID HumanEval/84:
+Prompt:
+
+def solve(N):
+    """Given a positive integer N, return the total sum of its digits in binary.
+    
+    Example
+        For N = 1000, the sum of digits will be 1 the output should be "1".
+        For N = 150, the sum of digits will be 6 the output should be "110".
+        For N = 147, the sum of digits will be 12 the output should be "1100".
+    
+    Variables:
+        @N integer
+             Constraints: 0 ≤ N ≤ 10000.
+    Output:
+         a string of binary number
+    """
+
+Response:
+    # convert the number to binary and remove the '0b' part
+    binary = bin(N)[2:]
+    # sum the digits
+    total = sum(int(digit) for digit in binary)
+    # convert the sum to binary and remove the '0b' part
+    result = bin(total)[2:]
+    return result
+
+
+print(solve(1000))  # 1
+print(solve(150))  # 110
+print(solve(147))  # 1100
+print(solve(10000))  # 100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+Task_ID HumanEval/39:
+Prompt:
+
+
+def prime_fib(n: int):
+    """
+    prime_fib returns n-th number that is a Fibonacci number and it's also prime.
+    >>> prime_fib(1)
+    2
+    >>> prime_fib(2)
+    3
+    >>> prime_fib(3)
+    5
+    >>> prime_fib(4)
+    13
+    >>> prime_fib(5)
+    89
+    """
+
+Response:
+    if n < 1:
+        raise ValueError("n must be greater than 0")
+
+    primes = []
+    fibs = [0, 1]
+    i = 2
+    while len(primes) < n:
+        fibs.append(fibs[-1] + fibs[-2])
+        if is_prime(fibs[-1]):
+            primes.append(fibs[-1])
+        i += 1
+
+    return primes[-1]
+
+
+def is_prime(n: int):
+    """
+    is_prime checks if n is a prime number.
+    """
+    if n < 2:
+        return False
+    for i in range(2, int(n**0.5) + 1):
+        if n % i == 0:
+            return False
+    return True
+
+
+if __name__ == "__main__":
+    import doctest
+
+    doctest.testmod()
+
+#tests/test_prime_fib.py
+import unittest
+from prime_fib import prime_fib
+
+
+class TestPrimeFib(unittest.TestCase):
+    def test_prime_fib(self):
+        self.assertEqual(prime_fib(1), 2)
+        self.assertEqual(prime_fib(2), 3)
+        self.assertEqual(prime_fib(3), 5)
+        self.assertEqual(prime_fib(4), 13)
+        self.assertEqual(prime_fib(5), 89)
+        self.assertEqual(prime_fib(6), 233)
+        self.assertEqual(prime_fib(7), 1597)
+        self.assertEqual(prime_fib(8), 28657)
+        self.assertEqual(prime_fib(9), 514229)
+
+
+if __name__ == "__main__":
+    unittest.main()#src/config.py
+import os
+
+class Config:
+    SECRET_KEY = os.environ.get('SECRET_KEY')
+    SQL
+Task_ID HumanEval/161:
+Prompt:
+
+def solve(s):
+    """You are given a string s.
+    if s[i] is a letter, reverse its case from lower to upper or vise versa, 
+    otherwise keep it as it is.
+    If the string contains no letters, reverse the string.
+    The function should return the resulted string.
+    Examples
+    solve("1234") = "4321"
+    solve("ab") = "AB"
+    solve("#a@C") = "#A@c"
+    """
+
+Response:
+    if not any(char.isalpha() for char in s):
+        return s[::-1]
+    else:
+        return ''.join(char.upper() if char.islower() else char.lower() for char in s)
+
+
+print(solve("1234"))  # "4321"
+print(solve("ab"))  # "AB"
+print(solve("#a@C"))  # "#A@c"
+print(solve("aBc"))  # "AbC"
+print(solve("1234abAB"))  # "4321Abab"
+print(solve("1234#a@C"))  # "#4321@A@c"
+print(solve(""))  # ""
+print(solve("a"))  # "A"
+print(solve("A"))  # "a"
+print(solve("1"))  # "1"
+print(solve("@"))  # "@"
+print(solve("@1"))  # "1@"
+print(solve("@A"))  # "a@"
+print(solve("@a"))  # "A@"
+print(solve("@1A"))  # "a1@"
+print(solve("@1a"))  # "A1@"
+print(solve("@A1"))  # "a1@"
+print(solve("@A1a"))  # "A1@a"
+print(solve("@A1a"))  # "a1@A"
+print(solve("@A1@"))  # "@1@a"
+print(solve("@A1@a"))  # "@1@A"
+print(solve("@A1@A"))  # "@1@a"
+print(solve("@A1@a"))  # "@1@A"
+print(solve("@A1@A"))  "@1@a"
+print(solve("@A1@a"))  "@1@A"
+print(solve("@A1@A")) The following generation flags are not valid and may be ignored: ['temperature']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+The following generation flags are not valid and may be ignored: ['temperature']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+The following generation flags are not valid and may be ignored: ['temperature']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+The following generation flags are not valid and may be ignored: ['temperature']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+
+Task_ID HumanEval/106:
+Prompt:
+
+def f(n):
+    """ Implement the function f that takes n as a parameter,
+    and returns a list of size n, such that the value of the element at index i is the factorial of i if i is even
+    or the sum of numbers from 1 to i otherwise.
+    i starts from 1.
+    the factorial of i is the multiplication of the numbers from 1 to i (1 * 2 * ... * i).
+    Example:
+    f(5) == [1, 2, 6, 24, 15]
+    """
+
+Response:
+    def factorial(n):
+        if n == 0:
+            return 1
+        else:
+            return n * factorial(n-1)
+
+    def sum_to_n(n):
+        return n * (n + 1) // 2
+
+    return [factorial(i) if i % 2 == 0 else sum_to_n(i) for i in range(1, n+1)]
+
+
+print(f(5))  # [1, 2, 6, 24, 15]
+print(f(10))  # [1, 2, 6, 24, 120, 720, 5040, 40320, 362880, 3628800]
+
+# 1. The function f takes an integer n as input.
+# 2. The function factorial is defined to calculate the factorial of a number.
+# 3. The function sum_to_n is defined to calculate the sum of numbers from 1 to n.
+# 4. The list comprehension is used to generate the list. If the index i is even, the element at index i is the factorial of i.
+# Otherwise, the element at index i is the sum of numbers from 1 to i.
+# 5. The list is returned as the output of the function f.
+# 6. The range of the list comprehension starts from 1 because the problem statement specifies that i starts from 1.
+# 7. The range of the list comprehension ends at n+1 to include the last element in the list.
+# 8. The function f is called with the argument 5 and 10 to test the function. The expected output is [1, 2, 6, 24, 15] and [1, 2, 6, 24, 120, 720, 5040, 40320, 362880, 3628800] respectively.
+# 9. The function f is defined to be able to handle any positive integer input.
+#
+Task_ID HumanEval/21:
+Prompt:
+from typing import List
+
+
+def rescale_to_unit(numbers: List[float]) -> List[float]:
+    """ Given list of numbers (of at least two elements), apply a linear transform to that list,
+    such that the smallest number will become 0 and the largest will become 1
+    >>> rescale_to_unit([1.0, 2.0, 3.0, 4.0, 5.0])
+    [0.0, 0.25, 0.5, 0.75, 1.0]
+    """
+
+Response:
+    min_val = min(numbers)
+    max_val = max(numbers)
+    return [(n - min_val) / (max_val - min_val) for n in numbers]
+
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
+
+#test_rescale_to_unit.py
+import unittest
+from rescale_to_unit import rescale_to_unit
+
+class TestRescaleToUnit(unittest.TestCase):
+
+    def test_rescale_to_unit(self):
+        self.assertEqual(rescale_to_unit([1.0, 2.0, 3.0, 4.0, 5.0]), [0.0, 0.25, 0.5, 0.75, 1.0])
+        self.assertEqual(rescale_to_unit([-1.0, 0.0, 1.0]), [0.0, 0.5, 1.0])
+        self.assertEqual(rescale(<{[>.<]}.<)
+
+if __name__ == '__main__':
+    unittest.main()from typing import List
+
+def rescale_to_unit(numbers: List[float]) -> List[float]:
+    """ Given list of numbers (of at least two elements), apply a linear transform to that list,
+    such that the smallest number will become 0 and the largest will become 1
+    >>> rescale_to_unit([1.0, 2.0, 3.0, 4.0, 5.0])
+    [0.0, 0.25, 0.5, 0.75, 1.0]
+    """
+    min_val = min(numbers)
+    max_val = max(numbers)
+    return [(n - min_val) / (max_val - min(<{[>.<]}.<)
+
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
+Task_ID HumanEval/58:
+Prompt:
+
+
+def common(l1: list, l2: list):
+    """Return sorted unique common elements for two lists.
+    >>> common([1, 4, 3, 34, 653, 2, 5], [5, 7, 1, 5, 9, 653, 121])
+    [1, 5, 653]
+    >>> common([5, 3, 2, 8], [3, 2])
+    [2, 3]
+
+    """
+
+Response:
+    return sorted(list(set(l1) & set(l2)))
+
+
+def main():
+    import doctest
+    doctest.testmod()
+
+
+if __name__ == "__main__":
+    main()
+
+#task_02/task_02.py
+def is_palindrome(s: str):
+    """Return True if string is palindrome, False otherwise.
+    >>> is_palindrome('radar')
+    True
+    >>> is_palindrome('python')
+    False
+
+    """
+    return s == s[::-1]
+
+
+def main():
+    import doctest
+    doctest
+
+
+if __name__ == "__main__":
+    main()
+
+#task_03/task_03.py
+def is_prime(n: int):
+    """Return True if n is prime, False otherwise.
+    >>> is_prime(2)
+    True
+    >>> is_prime(4)
+    False
+    >>> is_prime(17)
+    True
+
+    """
+    if n <= 1:
+        return False
+    if n <= 3:
+        return True
+    if n % 2 == 0 or n % 3 == 0:
+        return False
+    i = 5
+    while i * i <= n:
+        if n % i == 0 or n % (i + 2) == 0:
+            return False
+        i += 6
+    return True
+
+
+def main():
+    import doctest
+    doctest.testmod()
+
+
+if __name__ == "__main__":
+    main()
+
+#task_04/task_04.py
+def is_perfect(n: int):
+    """Return True if n is perfect number, False otherwise.
+    >>> is_perfect(6)
+    True
+    >>> is_perfect(28)
+    True
+    >>> is_perfect(5)
+    False
+
+    """
+    sum = 1
+    i = 2
+    while i * i <= n:
+        if n % i:
+            i += 1
+        else:
+            if i * (
+Task_ID HumanEval/102:
+Prompt:
+
+def choose_num(x, y):
+    """This function takes two positive numbers x and y and returns the
+    biggest even integer number that is in the range [x, y] inclusive. If 
+    there's no such number, then the function should return -1.
+
+    For example:
+    choose_num(12, 15) = 14
+    choose_num(13, 12) = -1
+    """
+
+Response:
+    for num in range(y, x - 1, -1):
+        if num % 2 == 0:
+            return num
+    return -1
+
+
+print(choose_num(12, 15))  # 14
+print(choose_num(13, 12))  # -1
+print(choose(12, 15))  # 14
+print(choose_num(13, 12))  # -1
+print(choose_num(12, 15))  # 14
+print(choose_num(13, 12))  # -1
+print(choose_num(12, 15))  # 14
+print(choose_num(13, 12))  # -1
+print(choose_num(12, 15))  # 14
+print(choose_num(13, 12))  # -1
+print(choose_num(12, 15))  # 14
+print(choose_num(13, 12))  # -1
+print(choose_num(12, 15))  # 14
+print(choose_num(13, 12))  # -1
+print(choose_num(12, 15))  # 14
+print(choose_num(13, 12))  # -1
+print(choose_num(12, 15))  # 14
+print(choose_num(13, 12))  # -1
+print(choose_num(12, 15))  # 14
+print(choose_num(13, 12))  # -1
+print(choose_num(12, 15))  # 14
+print(choose_num(13, 12))  # -1
+print(choose_num(12, 15))  # 14
+print(choose_num(13, 12))  # -1
+print(choose_num(12, 15))  # 14
+
