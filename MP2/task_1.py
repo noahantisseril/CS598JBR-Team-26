@@ -1,6 +1,7 @@
 import jsonlines
 import sys
 import torch
+import re
 from transformers import AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig
 
 #####################################################
@@ -11,24 +12,81 @@ def save_file(content, file_path):
     with open(file_path, 'w') as file:
         file.write(content)
 
+# Extract first test case from the test string
+def extract_test_case(test_string):
+    lines = test_string.strip().split('\n')
+    for line in lines:
+        if 'assert candidate' in line or 'assert ' in line:
+            # test case is of format "assert candidate('[]]]]]]][[[[[]') == False"
+            match = re.search(r'assert\s+(?:candidate)?\s*\((.*?)\)\s*==\s*(.+?)(?:,|$)', line)
+            if match:
+                input_part = match.group(1).strip()
+                expected_output = match.group(2).strip().rstrip(',').strip()
+                return input_part, expected_output
+    return None, None
+
+# Extract the output from between the [Output] [/Output] tags
+def extract_output_from_response(response):
+    match = re.search(r'\[Output\](.*?)\[/?Output\]', response, re.IGNORECASE | re.DOTALL)
+    if match:
+        return match.group(1).strip()
+    return None
+
 def prompt_model(dataset, model_name = "deepseek-ai/deepseek-coder-6.7b-instruct", vanilla = True):
     print(f"Working with {model_name} prompt type {vanilla}...")
     
     # TODO: download the model
+    tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+
     # TODO: load the model with quantization
+    quantization_config = BitsAndBytesConfig(
+        load_in_4bit=True,
+        bnb_4bit_compute_dtype=torch.float16,
+        bnb_4bit_use_double_quant=True,
+        bnb_4bit_quant_type="nf4"
+    )
+    model = AutoModelForCausalLM.from_pretrained(
+        model_name,
+        quantization_config=quantization_config,
+        device_map="auto",
+        trust_remote_code=True,
+        torch_dtype=torch.float16
+    )
     
     results = []
     for entry in dataset:
+        test_input, expected_output = extract_test_case(entry['test'])
         # TODO: create prompt for the model
         # Tip : Use can use any data from the dataset to create 
         #       the prompt including prompt, canonical_solution, test, etc.
-        prompt = ""
+        prompt = f"""You are an AI programming assistant. You are an AI programming assistant, utilizing the DeepSeek Coder model, developed by DeepSeek Company, and you only answer questions related to computer science. For politically sensitive questions, security and privacy issues, and other non-computer science questions, you will refuse to answer.
+
+### Instruction:
+If the input is {test_input}, what will the following code return?
+The return value prediction must be enclosed between [Output] and [/Output] tags. For example : [Output]prediction[/Output]
+
+{entry['canonical_solution']}
+
+### Response:
+"""
         
         # TODO: prompt the model and get the response
-        response = ""
+        inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
+        
+        with torch.no_grad():
+            outputs = model.generate(
+                **inputs,
+                max_new_tokens=500,
+                temperature=0.1,
+                do_sample=False,
+                pad_token_id=tokenizer.eos_token_id
+            )
+        
+        response = tokenizer.decode(outputs[0][inputs['input_ids'].shape[1]:], skip_special_tokens=True)
 
         # TODO: process the response and save it to results
-        verdict = False
+        predicted_output = extract_output_from_response(response)
+        verdict = predicted_output == expected_output
 
         print(f"Task_ID {entry['task_id']}:\nprompt:\n{prompt}\nresponse:\n{response}\nis_correct:\n{verdict}")
         results.append({
