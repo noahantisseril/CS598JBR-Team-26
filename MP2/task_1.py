@@ -53,7 +53,10 @@ def extract_until_comma_outside_brackets(text):
 def extract_output_from_response(response):
     match = re.search(r'\[Output\](.*?)\[/?Output\]', response, re.IGNORECASE | re.DOTALL)
     if match:
-        return match.group(1).strip()
+        ret_string = match.group(1).strip()
+        if (ret_string[0] == "(" and ret_string[-1] == ")"):
+            return ret_string[1:-1]
+        return ret_string
     return None
 
 def prompt_model(dataset, model_name = "deepseek-ai/deepseek-coder-6.7b-instruct", vanilla = True):
