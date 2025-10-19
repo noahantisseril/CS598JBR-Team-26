@@ -10,7 +10,7 @@ import ast
 # Please finish all TODOs in this file for MP2;
 #####################################################
 
-random.seed(1)
+random.seed(33)
 
 def save_file(content, file_path):
     with open(file_path, 'w') as file:
@@ -118,14 +118,15 @@ Determine the return value of the code for the given input.
 
 The return value prediction must be enclosed between [Output] and [/Output] tags.
 
-Output format (STRICT):
+Output format (CRITICAL):
 - Your ENTIRE response must be exactly one line in the form:
   [Output]<value>[/Output]
 - Do NOT include any other text, explanations, or code.
 - Do NOT include backticks or single quotes.
 - Use canonical Python literals for values (e.g., True/False, None, double quotes for strings).
+- Infer the return type by looking at the comments and header in the code section
 
-Think through the problem privately. Use test examples in the prompt to infer correct return type/format. Only output the final answer in the required tag.
+Think through the problem privately. Only output the final answer in the required tag.
 
 Code:
 
