@@ -115,24 +115,19 @@ The return value prediction must be enclosed between [Output] and [/Output] tags
             prompt = f"""You are an AI programming assistant specialized in Computer Science. Utilizing the DeepSeek Coder model, you will answer questions related to computer science. For politically sensitive questions, security and privacy issues, and other non-computer science questions, you will refuse to answer.
 
 ### Instruction:
-Determine the return value of the code for the given input.
+Determine the exact return value of the code for the given input.
 
-The return value prediction must be enclosed between [Output] and [/Output] tags.
+Output (STRICT):
+- Respond on **one line**: [Output]<value>[/Output]
+- No extra text, code, or formatting.
+- Use canonical Python literals (True/False, None, double-quoted strings, proper repr spacing).
 
-Output format (STRICT):
-- Your ENTIRE response must be exactly one line in the form:
-  [Output]<value>[/Output]
-- Do NOT include any other text, explanations, or code.
-- Do NOT include backticks or single quotes.
-- Use canonical Python literals for values (e.g., True/False, double-quote strings, correct repr spacing).
-
-Reason **silently** before answering:
-- Trace the executed path step-by-step (functions called, loops, branches, early returns).
-- Compute all intermediate values exactly using **Python semantics** (/, //, %, **, slicing).
-- When comparing numbers, perform an explicit numeric check (no heuristics, no string/lexicographic logic). 
-- Cross-check with 1-2 nearby sanity cases from the provided tests to confirm **type and format**.
-- If any check contradicts earlier steps, re-trace and fix before answering.
-- Output only the final value in the required tags.
+Reason **internally and precisely**:
+- Execute the code mentally **as Python would** (respect indentation, loops, comparisons, and operator precedence).
+- Evaluate every comparison and arithmetic operation exactly (e.g. numeric 2 > 1 must be true).
+- Follow each branch logically to its return.
+- Use provided tests only to confirm the expected **type and format** of the final value.
+- After confirming correctness, output only the final value in the required tags.
 
 
 Code:
