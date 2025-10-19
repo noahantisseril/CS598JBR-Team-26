@@ -125,7 +125,7 @@ Output format (STRICT):
 - Do NOT include backticks or single quotes.
 - Use canonical Python literals for values (e.g., True/False, None, double quotes for strings).
 
-Think through the problem privately. Use test examples in the prompt to infer correct return type/format. Only output the final answer in the required tag.
+Think through the problem privately. Use test examples in the prompt to infer correct return type/format and to understand why the code performs a certain way. Only output the final answer in the required tag.
 
 Code:
 
