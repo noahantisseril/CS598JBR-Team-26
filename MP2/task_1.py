@@ -141,13 +141,6 @@ Code:
 {entry['prompt']}
 {entry['canonical_solution']}
 
-Example testcases:
-"""
-            for inp, outp in testcases:
-                prompt += f"\nInput: {inp}, Output: [Output]{outp}[/Output]\n"
-
-            prompt += f"""
-
 Input:
 {test_input}
 
