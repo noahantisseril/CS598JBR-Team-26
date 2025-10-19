@@ -26,19 +26,6 @@ def create_prompt(entry, task_id, vanilla=True):
     )
 
     if not vanilla:
-        # base_prompt += (
-        #     "The input code includes the full function definition (signature + body).\n\n"
-        #     "Write tests specifically for this function.\n\n"
-        #     "Generate comprehensive tests that achieve high branch and line coverage. "
-        #     "Ensure the generated tests cover all execution paths in the code.\n\n"
-        #     "IMPORTANT:\n"
-        #     "- Only provide runnable Python code starting with `import pytest`.\n"
-        #     # "- Do NOT include any explanations, comments, or sentences before or after the code.\n"
-        #     "- Write multiple test functions (e.g., `def test_case_1():`, `def test_case_2():`, etc.) "
-        #     "with each function testing a different input scenario.\n"
-        #     "- The output should be directly executable as a test file.\n\n"
-        #     "- Ensure there are at least 5 separate test cases covering typical, edge, empty, negative, and unusual inputs.\n\n"
-        # )
         base_prompt += (
             "The input code includes the full function definition (signature + body).\n"
             "Only write unit tests. Do not include explanations, comments, or extra text.\n"
@@ -74,8 +61,8 @@ def prompt_model(dataset, model_name = "deepseek-ai/deepseek-coder-6.7b-instruct
     )
     
     results = []
-    # change this back
-    for entry in dataset[:1]:
+
+    for entry in dataset:
         task_id = entry["task_id"].replace("/", "_")
         code_file = f"{task_id}.py"
         test_file = f"{task_id}_test.py"
