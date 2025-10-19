@@ -39,6 +39,7 @@ def create_prompt(entry, vanilla=True):
             "- Ensure edge cases, empty inputs, typical inputs, and unusual inputs are covered.\n"
             "- Each test function should have a clear, descriptive name if possible.\n"
             "- The output should be directly executable as a test file.\n\n"
+            "- Ensure there are at least 12-15 separate test cases covering typical, edge, empty, negative, and unusual inputs.\n\n"
         )
 
     base_prompt += f"{entry['prompt'] + "\n" + entry['canonical_solution']}\n\n### Response:\n"
