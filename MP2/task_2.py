@@ -64,8 +64,6 @@ def prompt_model(dataset, model_name = "deepseek-ai/deepseek-coder-6.7b-instruct
         trust_remote_code=True,
         torch_dtype=torch.float16
     )
-
-    # os.makedirs("GeneratedTests", exist_ok=True)
     
     results = []
     # change this back
@@ -104,7 +102,7 @@ def prompt_model(dataset, model_name = "deepseek-ai/deepseek-coder-6.7b-instruct
                 [
                     "pytest",
                     test_file,
-                    f"--cov={code_file}",
+                    f"--cov={task_id}",
                     f"--cov-report=json:{coverage_file}"
                 ],
                 capture_output=True,
