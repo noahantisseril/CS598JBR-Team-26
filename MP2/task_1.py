@@ -105,6 +105,7 @@ def prompt_model(dataset, model_name = "deepseek-ai/deepseek-coder-6.7b-instruct
 If the input is {test_input}, what will the following code return?
 The return value prediction must be enclosed between [Output] and [/Output] tags. For example : [Output]prediction[/Output]
 
+{entry['prompt']}
 {entry['canonical_solution']}
 
 ### Response:
