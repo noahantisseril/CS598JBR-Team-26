@@ -110,6 +110,9 @@ def prompt_model(dataset, model_name = "deepseek-ai/deepseek-coder-6.7b-instruct
                 timeout=60
             )
 
+            print(result.stdout)
+            print(result.stderr)
+
             # Parse coverage JSON if available
             coverage = None
             if os.path.exists(coverage_file):
