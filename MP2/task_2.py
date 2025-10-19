@@ -68,7 +68,8 @@ def prompt_model(dataset, model_name = "deepseek-ai/deepseek-coder-6.7b-instruct
     os.makedirs("GeneratedTests", exist_ok=True)
     
     results = []
-    for entry in dataset:
+    # change this back
+    for entry in dataset[:1]:
         task_id = entry["task_id"].split("/")[-1]
         code_file = f"GeneratedTests/{task_id}.py"
         test_file = f"GeneratedTests/{task_id}_test.py"
