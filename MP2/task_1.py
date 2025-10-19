@@ -4,6 +4,7 @@ import torch
 import re
 import random
 from transformers import AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig
+import ast
 
 #####################################################
 # Please finish all TODOs in this file for MP2;
@@ -48,6 +49,18 @@ def extract_until_comma_outside_brackets(text):
             result.append(char)
     
     return ''.join(result).strip()
+
+def smart_parse(s):
+    if s is None:
+        return None
+    s = s.strip()
+    try:
+        return ast.literal_eval(s)
+    except (ValueError, SyntaxError, TypeError):
+        try:
+            return ast.literal_eval(f'"{s}"')
+        except:
+            return s
 
 # Extract the output from between the [Output] [/Output] tags
 def extract_output_from_response(response):
@@ -145,7 +158,8 @@ Input:
         # and formatting for python literals.
         # With this approach, the string is parsed to a python literal before comparison.
         # This prevents slight string inconsistencies from changing answer correctness
-        verdict = ast.literal_eval(predicted_output) == ast.literal_eval(expected_output)
+        verdict = smart_parse(predicted_output) == smart_parse(expected_output)
+        # verdict = ast.literal_eval(predicted_output) == ast.literal_eval(expected_output)
         if not verdict:
             print("Mismatch:\n", predicted_output, expected_output)
 
