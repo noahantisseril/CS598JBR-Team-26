@@ -65,14 +65,14 @@ def prompt_model(dataset, model_name = "deepseek-ai/deepseek-coder-6.7b-instruct
         torch_dtype=torch.float16
     )
 
-    os.makedirs("GeneratedTests", exist_ok=True)
+    # os.makedirs("GeneratedTests", exist_ok=True)
     
     results = []
     # change this back
     for entry in dataset[:1]:
         task_id = entry["task_id"].split("/")[-1]
-        code_file = f"GeneratedTests/{task_id}.py"
-        test_file = f"GeneratedTests/{task_id}_test.py"
+        code_file = f"{task_id}.py"
+        test_file = f"{task_id}_test.py"
         coverage_file = f"Coverage/{task_id}_test_{'vanilla' if vanilla else 'crafted'}.json"
         full_code = entry['prompt'] + "\n" + entry['canonical_solution']
         save_file(full_code, code_file)
