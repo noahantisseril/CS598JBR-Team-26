@@ -39,6 +39,7 @@ def create_prompt(entry, vanilla=True):
             "- Ensure edge cases, empty inputs, typical inputs, and unusual inputs are covered.\n"
             "- Each test function should have a clear, descriptive name if possible.\n"
             "- The output should be directly executable as a test file.\n\n"
+            "- Do NOT include any code fences like ```python or ``` around the code."
         )
 
     base_prompt += f"{entry['prompt'] + "\n" + entry['canonical_solution']}\n\n### Response:\n"
@@ -109,6 +110,9 @@ def prompt_model(dataset, model_name = "deepseek-ai/deepseek-coder-6.7b-instruct
                 text=True,
                 timeout=60
             )
+
+            print(result.stdout)
+            print(result.stderr)
 
             # Parse coverage JSON if available
             coverage = None
