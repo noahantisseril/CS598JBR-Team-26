@@ -42,6 +42,7 @@ def create_prompt(entry, vanilla=True):
             "The input code includes the full function definition (signature + body).\n"
             "Only write unit tests. Do not include explanations, comments, or extra text.\n"
             "\n### Test Requirements:\n"
+            "- Import the function from the module where the code is saved.\n"
             "- Write multiple test functions (e.g., `def test_case_1():`, `def test_case_2():`).\n"
             "- Cover at least 5 cases including typical inputs, edge cases, empty inputs, negative inputs, and unusual inputs.\n"
             "- Ensure high branch and line coverage; include all execution paths.\n"
