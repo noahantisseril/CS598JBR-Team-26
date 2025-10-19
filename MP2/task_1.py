@@ -130,7 +130,7 @@ Reason **silently** before answering:
 - Trace the executed path step-by-step (functions called, loops, branches, early returns).
 - Compute all intermediate values exactly using **Python semantics** (/, //, %, **, slicing).
 - When comparing numbers, perform an explicit numeric check (no heuristics, no string/lexicographic logic). 
-- Cross-check with 1–2 nearby sanity cases from the provided tests to confirm **type and format**.
+- Cross-check with 1-2 nearby sanity cases from the provided tests to confirm **type and format**.
 - If any check contradicts earlier steps, re-trace and fix before answering.
 - Output only the final value in the required tags.
 
