@@ -21,10 +21,13 @@ def create_prompt(entry, vanilla=True):
         "security and privacy issues, and other non-computer science questions, you will refuse to answer.\n\n"
         "### Instruction:\n"
         "Generate a pytest test suite for the following Python function.\n\n"
-        "The input code will include the full function definition, including the function signature and its body. "
-        "Your task is to write tests specifically for this function.\n\n"
-        "Only write unit tests in the output and nothing else. "
-        "Do not rename the function or change its signature. Ensure the tests call the function exactly as defined.\n\n"
+        "The input code includes the full function definition (signature + body). "
+        "Write tests specifically for this function.\n\n"
+        "IMPORTANT:\n"
+        "- Only provide runnable Python code starting with `import pytest`.\n"
+        "- Do NOT include any explanations, comments, or sentences before or after the code.\n"
+        "- Do not rename the function or modify its signature.\n"
+        "- The output should be directly executable as a test file.\n\n"
     )
 
     if not vanilla:
@@ -34,7 +37,7 @@ def create_prompt(entry, vanilla=True):
             "Ensure the generated tests cover all execution paths in the code.\n\n"
         )
 
-    base_prompt += f"{entry['canonical_solution']}\n\n### Response:\n"
+    base_prompt += f"{entry['prompt'] + "\n" + entry['canonical_solution']}\n\n### Response:\n"
     return base_prompt
 
 def prompt_model(dataset, model_name = "deepseek-ai/deepseek-coder-6.7b-instruct", vanilla = True):
