@@ -13,7 +13,7 @@ def save_file(content, file_path):
     with open(file_path, 'w') as file:
         file.write(content)
 
-def create_prompt(entry, vanilla=True):
+def create_prompt(entry, task_id, vanilla=True):
     """Create test-generation prompt for a given dataset entry."""
     base_prompt = (
         "You are an AI programming assistant, utilizing the DeepSeek Coder model, developed by DeepSeek Company, "
@@ -42,6 +42,7 @@ def create_prompt(entry, vanilla=True):
             "The input code includes the full function definition (signature + body).\n"
             "Only write unit tests. Do not include explanations, comments, or extra text.\n"
             "\n### Test Requirements:\n"
+            f"Import the function from the module `{task_id}.py` instead of redefining it.\n\n"
             "- Write multiple test functions (e.g., `def test_case_1():`, `def test_case_2():`).\n"
             "- Cover at least 5 cases including typical inputs, edge cases, empty inputs, negative inputs, and unusual inputs.\n"
             "- Ensure high branch and line coverage; include all execution paths.\n"
@@ -85,7 +86,7 @@ def prompt_model(dataset, model_name = "deepseek-ai/deepseek-coder-6.7b-instruct
         # TODO: create prompt for the model
         # Tip : Use can use any data from the dataset to create 
         #       the prompt including prompt, canonical_solution, test, etc.
-        prompt = create_prompt(entry, vanilla=vanilla)
+        prompt = create_prompt(entry, task_id, vanilla=vanilla)
         inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
         
         # TODO: prompt the model and get the response
