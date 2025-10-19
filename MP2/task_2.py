@@ -22,6 +22,7 @@ def create_prompt(entry, task_id, vanilla=True):
         "### Instruction:\n"
         "Generate a pytest test suite for the following code.\n\n"
         "Only write unit tests in the output and nothing else."
+        f"Import the function from the module `{task_id}.py` instead of redefining it.\n\n"
     )
 
     if not vanilla:
@@ -42,7 +43,6 @@ def create_prompt(entry, task_id, vanilla=True):
             "The input code includes the full function definition (signature + body).\n"
             "Only write unit tests. Do not include explanations, comments, or extra text.\n"
             "\n### Test Requirements:\n"
-            f"Import the function from the module `{task_id}.py` instead of redefining it.\n\n"
             "- Write multiple test functions (e.g., `def test_case_1():`, `def test_case_2():`).\n"
             "- Cover at least 5 cases including typical inputs, edge cases, empty inputs, negative inputs, and unusual inputs.\n"
             "- Ensure high branch and line coverage; include all execution paths.\n"
