@@ -18,7 +18,7 @@ def extract_test_case(test_string):
     for line in lines:
         if 'assert candidate' in line or 'assert ' in line:
             # test case is of format "assert candidate('[]]]]]]][[[[[]') == False"
-            match = re.search(r'assert\s+(?:candidate)?\s*\((.*?)\)\s*==\s*(.+?)(?:,|$)', line)
+            match = re.search(r'assert\s+(?:candidate)?\s*\((.*?)\)\s*==\s*(.+)', line)
             if match:
                 input_part = match.group(1).strip()
                 expected_output = match.group(2).strip().rstrip(',').strip()
