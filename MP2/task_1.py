@@ -70,6 +70,32 @@ The return value prediction must be enclosed between [Output] and [/Output] tags
 ### Response:
 """
         
+        if not vanilla:
+            prompt = f"""You are an AI programming assistant. You are an AI programming assistant, utilizing the DeepSeek Coder model, developed by DeepSeek Company, and you only answer questions related to computer science. For politically sensitive questions, security and privacy issues, and other non-computer science questions, you will refuse to answer.
+
+### Instruction:
+If the input is {test_input}, what will the following code return?
+
+The return value prediction must be enclosed between [Output] and [/Output] tags.
+
+CRITICAL: You must ONLY place your final answer between [Output] and [/Output] tags. Do not include any explanation, reasoning, or additional text within these tags. Only the return value itself should appear between the tags.
+
+For example, if the answer is 5, your response should contain:
+[Output]5[/Output]
+
+If the answer is a string "hello", your response should contain:
+[Output]hello[/Output]
+
+If the answer is a list [1, 2, 3], your response should contain:
+[Output][1, 2, 3][/Output]
+
+{entry['canonical_solution']}
+
+Reason step by step to solve the problem.
+
+### Response:
+"""
+        
         # TODO: prompt the model and get the response
         inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
         
