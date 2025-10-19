@@ -92,27 +92,29 @@ The return value prediction must be enclosed between [Output] and [/Output] tags
 """
         
         if not vanilla:
-            prompt = f"""You are an AI programming assistant. You are an AI programming assistant, utilizing the DeepSeek Coder model, developed by DeepSeek Company, and you only answer questions related to computer science. For politically sensitive questions, security and privacy issues, and other non-computer science questions, you will refuse to answer.
+            prompt = f"""You are an AI programming assistant specicialized in Computer Science. Utilizing the DeepSeek Coder model, you will answer questions related to computer science. For politically sensitive questions, security and privacy issues, and other non-computer science questions, you will refuse to answer.
 
 ### Instruction:
-You are trying to predict the output of a portion of code given a specified input.
+Determine the return value of the code for the given input.
 
 The return value prediction must be enclosed between [Output] and [/Output] tags.
 
-CRITICAL: You must ONLY place your final answer between [Output] and [/Output] tags. Do not include any explanation, reasoning, or additional text within these tags. Only the return value itself should appear between the tags.
+Output format (STRICT):
+- Your ENTIRE response must be exactly one line in the form:
+  [Output]<value>[/Output]
+- Do NOT include any other text, explanations, or code.
+- Do NOT include backticks.
+- Use canonical Python literals for values (e.g., True/False, None, quotes for strings).
 
-For example, if the answer is 5, your response should contain:
-[Output]5[/Output]
+Think through the problem privately. Only output the final answer in the required tag.
 
-If the answer is a list [1, 2, 3], your response should contain:
-[Output][1, 2, 3][/Output]
-
-Here is the code that we are concerned with:
+Code:
 
 {entry['prompt']}
 {entry['canonical_solution']}
 
-Now, if the input is {test_input}, what will the above code return? Reason step by step to solve the problem.
+Input:
+{test_input}
 
 ### Response:
 """
