@@ -20,8 +20,11 @@ def create_prompt(entry, vanilla=True):
         "and you only answer questions related to computer science. For politically sensitive questions, "
         "security and privacy issues, and other non-computer science questions, you will refuse to answer.\n\n"
         "### Instruction:\n"
-        "Generate a pytest test suite for the following code.\n\n"
-        "Only write unit tests in the output and nothing else.\n\n"
+        "Generate a pytest test suite for the following Python function.\n\n"
+        "The input code will include the full function definition, including the function signature and its body. "
+        "Your task is to write tests specifically for this function.\n\n"
+        "Only write unit tests in the output and nothing else. "
+        "Do not rename the function or change its signature. Ensure the tests call the function exactly as defined.\n\n"
     )
 
     if not vanilla:
