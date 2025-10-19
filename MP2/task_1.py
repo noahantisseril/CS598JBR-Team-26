@@ -113,6 +113,8 @@ Reason step by step to solve the problem.
         # TODO: process the response and save it to results
         predicted_output = extract_output_from_response(response)
         verdict = predicted_output == expected_output
+        if not verdict:
+            print("Mismatch:\n", predicted_output, expected_output)
 
         print(f"Task_ID {entry['task_id']}:\nprompt:\n{prompt}\nresponse:\n{response}\nis_correct:\n{verdict}")
         results.append({
