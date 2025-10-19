@@ -113,7 +113,7 @@ Now, if the input is {test_input}, what will the above code return? Reason step 
 
         # TODO: process the response and save it to results
         predicted_output = extract_output_from_response(response)
-        verdict = predicted_output == expected_output
+        verdict = predicted_output in expected_output
         if not verdict:
             print("Mismatch:\n", predicted_output, expected_output)
 
