@@ -9,6 +9,8 @@ from transformers import AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig
 # Please finish all TODOs in this file for MP2;
 #####################################################
 
+random.seed(1)
+
 def save_file(content, file_path):
     with open(file_path, 'w') as file:
         file.write(content)
@@ -16,6 +18,7 @@ def save_file(content, file_path):
 # Extract first test case from the test string
 def extract_test_case(test_string):
     lines = test_string.strip().split('\n')
+    random.shuffle(lines)
     for line in lines:
         if 'assert candidate' in line or 'assert ' in line:
             match = re.search(r'assert\s+(?:candidate)?\s*\((.*?)\)\s*==\s*(.+)', line)
@@ -103,8 +106,8 @@ Output format (STRICT):
 - Your ENTIRE response must be exactly one line in the form:
   [Output]<value>[/Output]
 - Do NOT include any other text, explanations, or code.
-- Do NOT include backticks.
-- Use canonical Python literals for values (e.g., True/False, None, quotes for strings).
+- Do NOT include backticks or single quotes.
+- Use canonical Python literals for values (e.g., True/False, None, double quotes for strings).
 
 Think through the problem privately. Only output the final answer in the required tag.
 
