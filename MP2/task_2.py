@@ -20,25 +20,25 @@ def create_prompt(entry, vanilla=True):
         "and you only answer questions related to computer science. For politically sensitive questions, "
         "security and privacy issues, and other non-computer science questions, you will refuse to answer.\n\n"
         "### Instruction:\n"
-        "Generate a pytest test suite for the following Python function.\n\n"
-        "The input code includes the full function definition (signature + body). "
-        "Write tests specifically for this function.\n\n"
-        "IMPORTANT:\n"
-        "- Only provide runnable Python code starting with `import pytest`.\n"
-        "- Do NOT include any explanations, comments, or sentences before or after the code.\n"
-        "- Do not rename the function or modify its signature.\n"
-        "- Write multiple test functions (e.g., `def test_case_1():`, `def test_case_2():`, etc.) "
-        "with each function testing a different input scenario.\n"
-        "- Ensure edge cases, empty inputs, typical inputs, and unusual inputs are covered.\n"
-        "- Each test function should have a clear, descriptive name if possible.\n"
-        "- The output should be directly executable as a test file.\n\n"
+        "Generate a pytest test suite for the following code.\n\n"
+        "Only write unit tests in the output and nothing else."
     )
 
     if not vanilla:
         base_prompt += (
+            "Write tests specifically for this function.\n\n"
             "Generate comprehensive tests that achieve high branch and line coverage. "
             "Include tests that explore edge cases, boundary values, and unusual inputs. "
             "Ensure the generated tests cover all execution paths in the code.\n\n"
+            "IMPORTANT:\n"
+            "- Only provide runnable Python code starting with `import pytest`.\n"
+            "- Do NOT include any explanations, comments, or sentences before or after the code.\n"
+            "- Do not rename the function or modify its signature.\n"
+            "- Write multiple test functions (e.g., `def test_case_1():`, `def test_case_2():`, etc.) "
+            "with each function testing a different input scenario.\n"
+            "- Ensure edge cases, empty inputs, typical inputs, and unusual inputs are covered.\n"
+            "- Each test function should have a clear, descriptive name if possible.\n"
+            "- The output should be directly executable as a test file.\n\n"
         )
 
     base_prompt += f"{entry['prompt'] + "\n" + entry['canonical_solution']}\n\n### Response:\n"
