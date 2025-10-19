@@ -125,7 +125,7 @@ Input:
         with torch.no_grad():
             outputs = model.generate(
                 **inputs,
-                max_new_tokens=500,
+                max_new_tokens=1000,
                 temperature=0.1,
                 do_sample=False,
                 pad_token_id=tokenizer.eos_token_id
