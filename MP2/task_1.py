@@ -20,6 +20,7 @@ def save_file(content, file_path):
 def extract_test_case(test_string):
     lines = test_string.strip().split('\n')
     random.shuffle(lines)
+    output = []
     for line in lines:
         if 'assert candidate' in line or 'assert ' in line:
             match = re.search(r'assert\s+(?:candidate)?\s*\((.*?)\)\s*==\s*(.+)', line)
@@ -29,8 +30,8 @@ def extract_test_case(test_string):
                 
                 # Extract until comma outside brackets
                 expected_output = extract_until_comma_outside_brackets(rest)
-                return input_part, expected_output
-    return None, None
+                output.append((input_part, expected_output))
+    return output
 
 def extract_until_comma_outside_brackets(text):
     bracket_depth = 0
@@ -95,7 +96,11 @@ def prompt_model(dataset, model_name = "deepseek-ai/deepseek-coder-6.7b-instruct
     
     results = []
     for entry in dataset:
-        test_input, expected_output = extract_test_case(entry['test'])
+        testcases = extract_test_case(entry['test'])
+        test_input, expected_output = 1, 2 # dont let them match by default
+        if testcases:
+            test_input, expected_output = testcases[0]
+            testcases.pop(0)
         # TODO: create prompt for the model
         # Tip : Use can use any data from the dataset to create 
         #       the prompt including prompt, canonical_solution, test, etc.
@@ -112,33 +117,47 @@ The return value prediction must be enclosed between [Output] and [/Output] tags
 """
         
         if not vanilla:
-            prompt = f"""You are an AI programming assistant specialized in Computer Science. Utilizing the DeepSeek Coder model, you will answer questions related to computer science. For politically sensitive questions, security and privacy issues, and other non-computer science questions, you will refuse to answer.
-
+            prompt = f"""
 ### Instruction:
-Determine the exact return value of the code for the given input.
+Determine the return value of the given Python function for the given input.
 
-Output (STRICT):
-- Respond on **one line**: [Output]<value>[/Output]
-- No extra text, code, or formatting.
-- Use canonical Python literals (True/False, None, double-quoted strings, proper repr spacing).
+The return value prediction MUST be enclosed between [Output] and [/Output] tags.
 
-Reason **internally and precisely**:
-- Execute the code mentally **as Python would** (respect indentation, loops, comparisons, and operator precedence).
-- Evaluate every comparison and arithmetic operation exactly (e.g. numeric 2 > 1 must be true).
-- Follow each branch logically to its return.
-- Use provided tests only to confirm the expected **type and format** of the final value.
-- After confirming correctness, output only the final value in the required tags.
+Here is a sample output: [Output]<return value>[/Output]
 
+Follow the steps outlined in the thought process section.
+
+Thought process:
+- Trace the executed path step-by-step (functions called, loops, branches, early returns).
+- Compute all intermediate values exactly using **Python semantics** (/, //, %, **, slicing).
+- When comparing numbers, perform an explicit numeric check (no heuristics, no string/lexicographic logic). 
+- Cross-check with 1-2 nearby sanity cases from the provided tests to confirm **type and format**.
+- If any check contradicts earlier steps, re-trace and fix before answering.
+- Once a final value is found, check if the value makes logical sense given the input and problem statement
+- Output only the final value in the required tags.
+
+Output format (STRICT):
+- ONLY use canonical Python literals for return values (e.g., True/False, Lists, None, double quotes for strings).
+- The output MUST be between [Output] and [/Output] tags
+- Do NOT include backticks or single quotes.
+- Infer the return type/format using the examples provided
+
+Clearly and explicitly outline your thought process, adhering to the above guidelines.
 
 Code:
 
 {entry['prompt']}
 {entry['canonical_solution']}
 
-Input:
+Example testcases:
+"""
+            for inp, outp in testcases:
+                prompt += f"\nInput: {inp}, Output: [Output]{outp}[/Output]\n"
+
+            prompt += f"""
+Now determine the output for this input:
 {test_input}
 
-### Response:
 """
         
         # TODO: prompt the model and get the response
