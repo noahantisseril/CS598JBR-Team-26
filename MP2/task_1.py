@@ -112,7 +112,7 @@ Output format (STRICT):
 - Do NOT include backticks or single quotes.
 - Use canonical Python literals for values (e.g., True/False, None, double quotes for strings).
 
-Think through the problem privately. Only output the final answer in the required tag.
+Think through the problem privately. Use test examples in the prompt to infer correct return type/format. Only output the final answer in the required tag.
 
 Code:
 
@@ -141,7 +141,11 @@ Input:
 
         # TODO: process the response and save it to results
         predicted_output = extract_output_from_response(response)
-        verdict = predicted_output == expected_output
+        # We used ast literal eval to handle cases with differing whitespace
+        # and formatting for python literals.
+        # With this approach, the string is parsed to a python literal before comparison.
+        # This prevents slight string inconsistencies from changing answer correctness
+        verdict = ast.literal_eval(predicted_output) == ast.literal_eval(expected_output)
         if not verdict:
             print("Mismatch:\n", predicted_output, expected_output)
 
