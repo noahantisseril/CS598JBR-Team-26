@@ -112,7 +112,7 @@ The return value prediction must be enclosed between [Output] and [/Output] tags
 """
         
         if not vanilla:
-            prompt = f"""You are an AI programming assistant specicialized in Computer Science. Utilizing the DeepSeek Coder model, you will answer questions related to computer science. For politically sensitive questions, security and privacy issues, and other non-computer science questions, you will refuse to answer.
+            prompt = f"""You are an AI programming assistant specialized in Computer Science. Utilizing the DeepSeek Coder model, you will answer questions related to computer science. For politically sensitive questions, security and privacy issues, and other non-computer science questions, you will refuse to answer.
 
 ### Instruction:
 Determine the return value of the code for the given input.
@@ -124,9 +124,14 @@ Output format (STRICT):
   [Output]<value>[/Output]
 - Do NOT include any other text, explanations, or code.
 - Do NOT include backticks or single quotes.
-- Use canonical Python literals for values (e.g., True/False, None, double quotes for strings).
+- Use canonical Python literals for values (e.g., True/False, double-quote strings, correct repr spacing).
 
-Think through the problem privately. Use test examples in the prompt to infer correct return type/format and to understand why the code performs a certain way. Only output the final answer in the required tag.
+Reason **silently** before answering:
+- Identify the function(s) used by the input and trace execution step-by-step.
+- Track variable updates, loops, branches, early returns, and mutations.
+- Watch for edge cases: empty/zero, off-by-one, integer vs float division, slicing, truthiness, duplicates.
+- Use the provided tests only to infer exact **type/format** of the return value.
+- Compute the final value and then output it in the required tags.
 
 Code:
 
