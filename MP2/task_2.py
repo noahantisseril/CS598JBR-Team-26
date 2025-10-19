@@ -33,11 +33,8 @@ def create_prompt(entry, vanilla=True):
             "IMPORTANT:\n"
             "- Only provide runnable Python code starting with `import pytest`.\n"
             "- Do NOT include any explanations, comments, or sentences before or after the code.\n"
-            "- Do not rename the function or modify its signature.\n"
             "- Write multiple test functions (e.g., `def test_case_1():`, `def test_case_2():`, etc.) "
             "with each function testing a different input scenario.\n"
-            "- Ensure edge cases, empty inputs, typical inputs, and unusual inputs are covered.\n"
-            "- Each test function should have a clear, descriptive name if possible.\n"
             "- The output should be directly executable as a test file.\n\n"
             "- Ensure there are at least 12-15 separate test cases covering typical, edge, empty, negative, and unusual inputs.\n\n"
         )
@@ -102,6 +99,11 @@ def prompt_model(dataset, model_name = "deepseek-ai/deepseek-coder-6.7b-instruct
             response = response[len("```"):].strip()
         if response.endswith("```"):
             response = response[:-len("```")].strip()
+
+        # Find the first occurrence of 'import pytest'
+        idx = response.find("import pytest")
+        if idx != -1:
+            response = response[idx:]  # Keep everything from 'import pytest' onwards
 
         save_file(response, test_file)
 
