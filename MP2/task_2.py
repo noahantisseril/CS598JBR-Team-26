@@ -76,7 +76,8 @@ def prompt_model(dataset, model_name = "deepseek-ai/deepseek-coder-6.7b-instruct
     results = []
     # change this back
     for entry in dataset[:1]:
-        task_id = entry["task_id"].split("/")[-1]
+        task_id = entry["task_id"]
+        task_id.replace("/", "_")
         code_file = f"{task_id}.py"
         test_file = f"{task_id}_test.py"
         coverage_file = f"Coverage/{task_id}_test_{'vanilla' if vanilla else 'crafted'}.json"
@@ -114,6 +115,10 @@ def prompt_model(dataset, model_name = "deepseek-ai/deepseek-coder-6.7b-instruct
         idx = response.find("import pytest")
         if idx != -1:
             response = response[idx:]  # Keep everything from 'import pytest' onwards
+
+        idx = response.find("```")
+        if idx != -1:
+            response = response[:idx].strip()
 
         save_file(response, test_file)
 
