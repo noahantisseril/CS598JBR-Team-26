@@ -127,11 +127,13 @@ Output format (STRICT):
 - Use canonical Python literals for values (e.g., True/False, double-quote strings, correct repr spacing).
 
 Reason **silently** before answering:
-- Identify the function(s) used by the input and trace execution step-by-step.
-- Track variable updates, loops, branches, early returns, and mutations.
-- Watch for edge cases: empty/zero, off-by-one, integer vs float division, slicing, truthiness, duplicates.
-- Use the provided tests only to infer exact **type/format** of the return value.
-- Compute the final value and then output it in the required tags.
+- Trace the executed path step-by-step (functions called, loops, branches, early returns).
+- Compute all intermediate values exactly using **Python semantics** (/, //, %, **, slicing).
+- When comparing numbers, perform an explicit numeric check (no heuristics, no string/lexicographic logic). 
+- Cross-check with 1–2 nearby sanity cases from the provided tests to confirm **type and format**.
+- If any check contradicts earlier steps, re-trace and fix before answering.
+- Output only the final value in the required tags.
+
 
 Code:
 
