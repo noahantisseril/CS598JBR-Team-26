@@ -97,7 +97,7 @@ def prompt_model(dataset, model_name = "deepseek-ai/deepseek-coder-6.7b-instruct
     results = []
     for entry in dataset:
         testcases = extract_test_case(entry['test'])
-        test_input, expected_output = 1, 2 # dont let them match by default
+        test_input, expected_output = "1", "2" # dont let them match by default
         if testcases:
             test_input, expected_output = testcases[0]
             testcases.pop(0)
@@ -158,6 +158,7 @@ Example testcases:
 Now determine the output for this input:
 {test_input}
 
+### Response:
 """
         
         # TODO: prompt the model and get the response
