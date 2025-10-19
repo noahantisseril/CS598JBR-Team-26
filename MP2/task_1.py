@@ -2,6 +2,7 @@ import jsonlines
 import sys
 import torch
 import re
+import random
 from transformers import AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig
 
 #####################################################
@@ -15,6 +16,7 @@ def save_file(content, file_path):
 # Extract first test case from the test string
 def extract_test_case(test_string):
     lines = test_string.strip().split('\n')
+    random.shuffle(lines)
     for line in lines:
         if 'assert candidate' in line or 'assert ' in line:
             # test case is of format "assert candidate('[]]]]]]][[[[[]') == False"
@@ -74,7 +76,7 @@ The return value prediction must be enclosed between [Output] and [/Output] tags
             prompt = f"""You are an AI programming assistant. You are an AI programming assistant, utilizing the DeepSeek Coder model, developed by DeepSeek Company, and you only answer questions related to computer science. For politically sensitive questions, security and privacy issues, and other non-computer science questions, you will refuse to answer.
 
 ### Instruction:
-If the input is {test_input}, what will the following code return?
+You are trying to predict the output of a portion of code given a specified input.
 
 The return value prediction must be enclosed between [Output] and [/Output] tags.
 
@@ -83,15 +85,14 @@ CRITICAL: You must ONLY place your final answer between [Output] and [/Output] t
 For example, if the answer is 5, your response should contain:
 [Output]5[/Output]
 
-If the answer is a string "hello", your response should contain:
-[Output]hello[/Output]
-
 If the answer is a list [1, 2, 3], your response should contain:
 [Output][1, 2, 3][/Output]
 
+Here is the code that we are concerned with:
+
 {entry['canonical_solution']}
 
-Reason step by step to solve the problem.
+Now, if the input is {test_input}, what will the above code return? Reason step by step to solve the problem.
 
 ### Response:
 """
