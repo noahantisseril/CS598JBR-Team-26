@@ -109,6 +109,7 @@ If the answer is a list [1, 2, 3], your response should contain:
 
 Here is the code that we are concerned with:
 
+{entry['prompt']}
 {entry['canonical_solution']}
 
 Now, if the input is {test_input}, what will the above code return? Reason step by step to solve the problem.
