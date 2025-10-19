@@ -39,7 +39,6 @@ def create_prompt(entry, vanilla=True):
             "- Ensure edge cases, empty inputs, typical inputs, and unusual inputs are covered.\n"
             "- Each test function should have a clear, descriptive name if possible.\n"
             "- The output should be directly executable as a test file.\n\n"
-            "- Do NOT include any code fences like ```python or ``` around the code."
         )
 
     base_prompt += f"{entry['prompt'] + "\n" + entry['canonical_solution']}\n\n### Response:\n"
@@ -94,6 +93,14 @@ def prompt_model(dataset, model_name = "deepseek-ai/deepseek-coder-6.7b-instruct
 
         output_text = tokenizer.decode(output_ids[0], skip_special_tokens=True)
         response = output_text.split("### Response:")[-1].strip()
+
+        # Strip ```python or ``` if they exist
+        if response.startswith("```python"):
+            response = response[len("```python"):].strip()
+        if response.startswith("```"):
+            response = response[len("```"):].strip()
+        if response.endswith("```"):
+            response = response[:-len("```")].strip()
 
         save_file(response, test_file)
 
