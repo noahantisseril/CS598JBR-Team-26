@@ -135,7 +135,7 @@ Reason **silently** before answering:
 - Track variable updates, loops, branches, early returns, and mutations.
 - Watch for edge cases: empty/zero, off-by-one, integer vs float division, slicing, truthiness, duplicates.
 - Use the provided tests only to infer exact **type/format** of the return value.
-- Compute the final value and then output it in the required tags.
+- Compute for the real input specified after '### Final Input:' only.
 
 Code:
 {entry['prompt']}
@@ -149,7 +149,7 @@ Example testcase:
 
             prompt += f"""
 
-Input:
+### Final Input:
 {test_input}
 
 ### Response:
