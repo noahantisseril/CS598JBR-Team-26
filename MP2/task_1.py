@@ -16,16 +16,35 @@ def save_file(content, file_path):
 # Extract first test case from the test string
 def extract_test_case(test_string):
     lines = test_string.strip().split('\n')
-    random.shuffle(lines)
     for line in lines:
         if 'assert candidate' in line or 'assert ' in line:
-            # test case is of format "assert candidate('[]]]]]]][[[[[]') == False"
             match = re.search(r'assert\s+(?:candidate)?\s*\((.*?)\)\s*==\s*(.+)', line)
             if match:
                 input_part = match.group(1).strip()
-                expected_output = match.group(2).strip().rstrip(',').strip()
+                rest = match.group(2).strip()
+                
+                # Extract until comma outside brackets
+                expected_output = extract_until_comma_outside_brackets(rest)
                 return input_part, expected_output
     return None, None
+
+def extract_until_comma_outside_brackets(text):
+    bracket_depth = 0
+    result = []
+    
+    for char in text:
+        if char == '[':
+            bracket_depth += 1
+            result.append(char)
+        elif char == ']':
+            bracket_depth -= 1
+            result.append(char)
+        elif char == ',' and bracket_depth == 0:
+            break
+        else:
+            result.append(char)
+    
+    return ''.join(result).strip()
 
 # Extract the output from between the [Output] [/Output] tags
 def extract_output_from_response(response):
@@ -113,7 +132,7 @@ Now, if the input is {test_input}, what will the above code return? Reason step 
 
         # TODO: process the response and save it to results
         predicted_output = extract_output_from_response(response)
-        verdict = predicted_output in expected_output
+        verdict = predicted_output == expected_output
         if not verdict:
             print("Mismatch:\n", predicted_output, expected_output)
 
