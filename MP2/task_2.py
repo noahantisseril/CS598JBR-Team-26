@@ -25,19 +25,28 @@ def create_prompt(entry, vanilla=True):
     )
 
     if not vanilla:
+        # base_prompt += (
+        #     "The input code includes the full function definition (signature + body).\n\n"
+        #     "Write tests specifically for this function.\n\n"
+        #     "Generate comprehensive tests that achieve high branch and line coverage. "
+        #     "Ensure the generated tests cover all execution paths in the code.\n\n"
+        #     "IMPORTANT:\n"
+        #     "- Only provide runnable Python code starting with `import pytest`.\n"
+        #     # "- Do NOT include any explanations, comments, or sentences before or after the code.\n"
+        #     "- Write multiple test functions (e.g., `def test_case_1():`, `def test_case_2():`, etc.) "
+        #     "with each function testing a different input scenario.\n"
+        #     "- The output should be directly executable as a test file.\n\n"
+        #     "- Ensure there are at least 5 separate test cases covering typical, edge, empty, negative, and unusual inputs.\n\n"
+        # )
         base_prompt += (
-            "Write tests specifically for this function.\n\n"
-            "Generate comprehensive tests that achieve high branch and line coverage. "
-            "Include tests that explore edge cases, boundary values, and unusual inputs. "
-            "Ensure the generated tests cover all execution paths in the code.\n\n"
-            "IMPORTANT:\n"
-            "- Only provide runnable Python code starting with `import pytest`.\n"
-            "- Do NOT include any explanations, comments, or sentences before or after the code.\n"
-            "- Write multiple test functions (e.g., `def test_case_1():`, `def test_case_2():`, etc.) "
-            "with each function testing a different input scenario.\n"
-            "- The output should be directly executable as a test file.\n\n"
-            "- Ensure there are at least 12-15 separate test cases covering typical, edge, empty, negative, and unusual inputs.\n\n"
+            "The input code includes the full function definition (signature + body).\n"
+            "Only write unit tests. Do not include explanations, comments, or extra text.\n"
+            "\n### Test Requirements:\n"
+            "- Write multiple test functions (e.g., `def test_case_1():`, `def test_case_2():`).\n"
+            "- Cover at least 5 cases including typical inputs, edge cases, empty inputs, negative inputs, and unusual inputs.\n"
+            "- Ensure high branch and line coverage; include all execution paths.\n"
         )
+
 
     base_prompt += f"{entry['prompt'] + "\n" + entry['canonical_solution']}\n\n### Response:\n"
     return base_prompt
