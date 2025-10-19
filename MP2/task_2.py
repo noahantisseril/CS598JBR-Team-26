@@ -1,3 +1,5 @@
+import os
+import subprocess
 import jsonlines
 import sys
 import torch
@@ -11,26 +13,107 @@ def save_file(content, file_path):
     with open(file_path, 'w') as file:
         file.write(content)
 
+def create_prompt(entry, vanilla=True):
+    """Create test-generation prompt for a given dataset entry."""
+    base_prompt = (
+        "You are an AI programming assistant, utilizing the DeepSeek Coder model, developed by DeepSeek Company, "
+        "and you only answer questions related to computer science. For politically sensitive questions, "
+        "security and privacy issues, and other non-computer science questions, you will refuse to answer.\n\n"
+        "### Instruction:\n"
+        "Generate a pytest test suite for the following code.\n\n"
+        "Only write unit tests in the output and nothing else.\n\n"
+    )
+
+    if not vanilla:
+        base_prompt += (
+            "Generate comprehensive tests that achieve high branch and line coverage. "
+            "Include tests that explore edge cases, boundary values, and unusual inputs. "
+            "Ensure the generated tests cover all execution paths in the code.\n\n"
+        )
+
+    base_prompt += f"{entry['canonical_solution']}\n\n### Response:\n"
+    return base_prompt
+
 def prompt_model(dataset, model_name = "deepseek-ai/deepseek-coder-6.7b-instruct", vanilla = True):
     print(f"Working with {model_name} prompt type {vanilla}...")
     
     # TODO: download the model
+    tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+
     # TODO: load the model with quantization
+    quantization_config = BitsAndBytesConfig(
+        load_in_4bit=True,
+        bnb_4bit_compute_dtype=torch.float16,
+        bnb_4bit_use_double_quant=True,
+        bnb_4bit_quant_type="nf4"
+    )
+    model = AutoModelForCausalLM.from_pretrained(
+        model_name,
+        quantization_config=quantization_config,
+        device_map="auto",
+        trust_remote_code=True,
+        torch_dtype=torch.float16
+    )
+
+    os.makedirs("GeneratedTests", exist_ok=True)
     
     results = []
     for entry in dataset:
+        task_id = entry["task_id"].split("/")[-1]
+        code_file = f"GeneratedTests/{task_id}.py"
+        test_file = f"GeneratedTests/{task_id}_test.py"
+        coverage_file = f"Coverage/{task_id}_test_{'vanilla' if vanilla else 'crafted'}.json"
+        full_code = entry['prompt'] + "\n" + entry['canonical_solution']
+        save_file(full_code, code_file)
+
         # TODO: create prompt for the model
         # Tip : Use can use any data from the dataset to create 
         #       the prompt including prompt, canonical_solution, test, etc.
-        prompt = ""
+        prompt = create_prompt(entry, vanilla=vanilla)
+        inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
         
         # TODO: prompt the model and get the response
-        response = ""
+        with torch.no_grad():
+            output_ids = model.generate(
+                **inputs,
+                max_new_tokens=512,
+                temperature=0.7,
+                do_sample=True,
+                top_p=0.95
+            )
+
+        output_text = tokenizer.decode(output_ids[0], skip_special_tokens=True)
+        response = output_text.split("### Response:")[-1].strip()
+
+        save_file(response, test_file)
 
         # TODO: process the response, generate coverage and save it to results
-        coverage = ""
+        try:
+            result = subprocess.run(
+                [
+                    "pytest",
+                    test_file,
+                    f"--cov={code_file}",
+                    f"--cov-report=json:{coverage_file}"
+                ],
+                capture_output=True,
+                text=True,
+                timeout=60
+            )
 
-        print(f"Task_ID {entry['task_id']}:\nprompt:\n{prompt}\nresponse:\n{response}\ncoverage:\n{coverage}")
+            # Parse coverage JSON if available
+            coverage = None
+            if os.path.exists(coverage_file):
+                with open(coverage_file, "r") as f:
+                    cov_json = f.read()
+                    coverage = cov_json
+
+        except subprocess.TimeoutExpired:
+            coverage = "TimeoutError: pytest execution took too long."
+        except Exception as e:
+            coverage = f"Error running pytest: {e}"
+
+        print(f"Task_ID {entry['task_id']}:\nprompt:\n{prompt}\nresponse:\n{response}\ncoverage:\n{coverage if isinstance(coverage, str) else 'OK'}")
         results.append({
             "task_id": entry["task_id"],
             "prompt": prompt,
