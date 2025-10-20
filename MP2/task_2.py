@@ -93,7 +93,7 @@ def prune_asserts(asserts, function_name):
         if after_paren != "":
             continue
 
-        pruned_asserts.append(assertion)
+        pruned_asserts.append(assertion + "\n")
     
     if len(pruned_asserts) == 0:
         pruned_asserts.append("\n\tpass\n")
