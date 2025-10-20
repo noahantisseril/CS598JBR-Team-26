@@ -235,7 +235,7 @@ def prompt_model(dataset, model_name = "deepseek-ai/deepseek-coder-6.7b-instruct
                 max_new_tokens=1000,
                 temperature=0.0,
                 do_sample=False,
-                top_p=0.95
+                pad_token_id=tokenizer.eos_token_id
             )
 
         output_text = tokenizer.decode(output_ids[0], skip_special_tokens=True)
