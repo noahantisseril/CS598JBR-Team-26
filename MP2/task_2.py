@@ -50,7 +50,6 @@ def format_response(response, testing_function, task_id, is_vanilla):
         "import pytest\n"
         f"from {task_id}_{type_prompting}.py import {testing_function}\n\n"
     )
-    formatted_response = "import pytest\n\n"
     for line in lines:
         func_name = get_function_name(line)
         if func_name is not None:
