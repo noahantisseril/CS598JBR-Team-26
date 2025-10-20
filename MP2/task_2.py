@@ -39,6 +39,28 @@ def create_prompt(entry, task_id, vanilla=True):
     base_prompt += f"{entry['prompt'] + "\n" + entry['canonical_solution']}\n\n### Response:\n"
     return base_prompt
 
+def remove_unterminated_last_line(text):
+    lines = text.rstrip().splitlines()
+    if not lines:
+        return text
+
+    last_line = lines[-1]
+
+    # Check for unterminated syntax characters
+    openers = "([{"
+    closers = ")]}"
+    quotes = "\"'"
+
+    # Basic syntax balance check
+    if (
+        any(ch in last_line for ch in openers)
+        and not any(ch in last_line for ch in closers)
+    ) or (last_line.count('"') % 2 == 1) or (last_line.count("'") % 2 == 1):
+        # Remove last line if it looks incomplete
+        lines = lines[:-1]
+
+    return "\n".join(lines) + "\n"
+
 def prompt_model(dataset, model_name = "deepseek-ai/deepseek-coder-6.7b-instruct", vanilla = True):
     print(f"Working with {model_name} prompt type {vanilla}...")
     
@@ -105,6 +127,8 @@ def prompt_model(dataset, model_name = "deepseek-ai/deepseek-coder-6.7b-instruct
         idx = response.find("```")
         if idx != -1:
             response = response[:idx].strip()
+
+        response = remove_unterminated_last_line(response)
 
         save_file(response, test_file)
 
