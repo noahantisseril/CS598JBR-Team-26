@@ -14,6 +14,91 @@ def save_file(content, file_path):
     with open(file_path, 'w') as file:
         file.write(content)
 
+def get_function_header(prompt):
+    splitted = prompt.split("\n")
+    for line in splitted:
+        if "def" in line:
+            return line
+    return ""
+
+def get_function_name(line):
+    line = line.strip()
+    if not line.startswith("def "):
+        return None
+    parts = line.split()
+    if len(parts) < 2:
+        return None
+    func_part = parts[1]
+    func_name = func_part.split("(")[0]
+    return func_name
+
+
+def rebuild_func(asserts, func_name):
+    ans = ""
+    ans += f"def {func_name}():\n"
+    for assertion in asserts:
+        ans += f"\t{assertion}"
+    return ans + "\n\n"
+
+def format_response(response, testing_function):
+    lines = response.split("\n")
+    curr_func = ""
+    curr_asserts = []
+    formatted_response = "import pytest\n\n"
+    for line in lines:
+        func_name = get_function_name(line)
+        if func_name is not None:
+            if curr_func != "":
+                pruned_asserts = prune_asserts(curr_asserts, testing_function)
+                formatted_response += rebuild_func(pruned_asserts, curr_func)
+            curr_func = func_name
+            curr_asserts = []
+        elif line.strip().startswith("assert"):
+            curr_asserts.append(line.strip())
+    if curr_func != "":
+        pruned_asserts = prune_asserts(curr_asserts, testing_function)
+        formatted_response += rebuild_func(curr_asserts, curr_func)
+    return formatted_response
+
+def prune_asserts(asserts, function_name):
+    pruned_asserts = []
+    for assertion in asserts:
+        hold = assertion.split("==")
+        if len(hold) != 2:
+            continue
+        
+        curr_assert, expected_val = hold
+        curr_assert = curr_assert.strip()
+        expected_val = expected_val.strip()
+        
+        # Check if curr_assert has the structure: assert function_name(...)
+        if not curr_assert.startswith("assert"):
+            continue
+        
+        after_assert = curr_assert[6:].strip()  # "assert" is 6 chars
+        
+        if not after_assert.startswith(function_name):
+            continue
+        
+        after_function = after_assert[len(function_name):].strip()
+        if not after_function.startswith("("):
+            continue
+        
+        if ")" not in after_function:
+            continue
+        
+        closing_paren_idx = after_function.rfind(")")
+        after_paren = after_function[closing_paren_idx + 1:].strip()
+        if after_paren != "":
+            continue
+
+        pruned_asserts.append(assertion)
+    
+    if len(pruned_asserts) == 0:
+        pruned_asserts.append("\n\tpass\n")
+    
+    return pruned_asserts
+
 def create_prompt(entry, task_id, vanilla=True):
     """Create test-generation prompt for a given dataset entry."""
     base_prompt = (
@@ -131,6 +216,9 @@ def prompt_model(dataset, model_name = "deepseek-ai/deepseek-coder-6.7b-instruct
         full_code = entry['prompt'] + "\n" + entry['canonical_solution']
         save_file(full_code, code_file)
 
+        function_header = get_function_header(entry["prompt"])
+        function_name = get_function_name(function_header)
+
         # TODO: create prompt for the model
         # Tip : Use can use any data from the dataset to create 
         #       the prompt including prompt, canonical_solution, test, etc.
@@ -150,24 +238,26 @@ def prompt_model(dataset, model_name = "deepseek-ai/deepseek-coder-6.7b-instruct
         output_text = tokenizer.decode(output_ids[0], skip_special_tokens=True)
         response = output_text.split("### Response:")[-1].strip()
 
-        # Strip ```python or ``` if they exist
-        if response.startswith("```python"):
-            response = response[len("```python"):].strip()
-        if response.startswith("```"):
-            response = response[len("```"):].strip()
-        if response.endswith("```"):
-            response = response[:-len("```")].strip()
+        response = format_response(response, function_name)
 
-        # Find the first occurrence of 'import pytest'
-        idx = response.find("import pytest")
-        if idx != -1:
-            response = response[idx:]  # Keep everything from 'import pytest' onwards
+        # # Strip ```python or ``` if they exist
+        # if response.startswith("```python"):
+        #     response = response[len("```python"):].strip()
+        # if response.startswith("```"):
+        #     response = response[len("```"):].strip()
+        # if response.endswith("```"):
+        #     response = response[:-len("```")].strip()
 
-        idx = response.find("```")
-        if idx != -1:
-            response = response[:idx].strip()
+        # # Find the first occurrence of 'import pytest'
+        # idx = response.find("import pytest")
+        # if idx != -1:
+        #     response = response[idx:]  # Keep everything from 'import pytest' onwards
 
-        response = drop_invalid_tests(remove_unterminated_last_line(response))
+        # idx = response.find("```")
+        # if idx != -1:
+        #     response = response[:idx].strip()
+
+        # response = drop_invalid_tests(remove_unterminated_last_line(response))
 
         save_file(response, test_file)
 
