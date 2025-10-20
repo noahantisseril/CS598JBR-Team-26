@@ -37,7 +37,9 @@ def extract_test_case(test_string):
                 
                 # Extract until comma outside brackets
                 expected_output = extract_until_comma_outside_brackets(rest)
-                output.append((input_part, expected_output))
+                return input_part, expected_output
+                # output.append((input_part, expected_output))
+    return "incorrect", "correct"
     return output
 
 def extract_until_comma_outside_brackets(text):
@@ -103,11 +105,11 @@ def prompt_model(dataset, model_name = "deepseek-ai/deepseek-coder-6.7b-instruct
     
     results = []
     for entry in dataset:
-        testcases = extract_test_case(entry['test'])
-        test_input, expected_output = "1", "2" # dont let them match by default
-        if testcases:
-            test_input, expected_output = testcases[0]
-            testcases.pop(0)
+        test_input, expected_output = extract_test_case(entry['test'])
+        # test_input, expected_output = "1", "2" # dont let them match by default
+        # if testcases:
+        #     test_input, expected_output = testcases[0]
+        #     testcases.pop(0)
         # TODO: create prompt for the model
         # Tip : Use can use any data from the dataset to create 
         #       the prompt including prompt, canonical_solution, test, etc.
