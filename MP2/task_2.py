@@ -3,6 +3,7 @@ import subprocess
 import jsonlines
 import sys
 import torch
+import ast
 from transformers import AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig
 
 #####################################################
@@ -60,6 +61,44 @@ def remove_unterminated_last_line(text):
         lines = lines[:-1]
 
     return "\n".join(lines) + "\n"
+
+def drop_invalid_tests(test_content):
+    """
+    Parse test file using AST and drop invalid test functions.
+    Keeps imports and valid `def test_*` functions only.
+    """
+    valid_parts = []
+    lines = test_content.splitlines(keepends=True)
+
+    # Keep top-level imports (simple heuristic)
+    for line in lines:
+        if line.strip().startswith("import") or line.strip().startswith("from"):
+            valid_parts.append(line)
+
+    # Parse the file into an AST
+    try:
+        tree = ast.parse(test_content)
+        # If this works, no need to clean anything
+        return test_content
+    except SyntaxError:
+        pass  # We'll do selective parsing below
+
+    # If the full parse failed, try extracting test functions individually
+    module = ast.parse("")  # empty fallback
+    for node in ast.walk(ast.parse("\n".join(lines))):
+        if isinstance(node, ast.FunctionDef) and node.name.startswith("test_"):
+            # Extract corresponding source code
+            start = node.lineno - 1
+            end = getattr(node, "end_lineno", None)
+            func_source = "".join(lines[start:end]) if end else lines[start]
+            try:
+                ast.parse(func_source)
+                valid_parts.append("\n" + func_source + "\n")
+            except SyntaxError:
+                # skip invalid test functions
+                continue
+
+    return "".join(valid_parts)
 
 def prompt_model(dataset, model_name = "deepseek-ai/deepseek-coder-6.7b-instruct", vanilla = True):
     print(f"Working with {model_name} prompt type {vanilla}...")
@@ -128,7 +167,7 @@ def prompt_model(dataset, model_name = "deepseek-ai/deepseek-coder-6.7b-instruct
         if idx != -1:
             response = response[:idx].strip()
 
-        response = remove_unterminated_last_line(response)
+        response = drop_invalid_tests(remove_unterminated_last_line(response))
 
         save_file(response, test_file)
 
