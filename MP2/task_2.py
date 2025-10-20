@@ -48,7 +48,7 @@ def format_response(response, testing_function, task_id, is_vanilla):
     type_prompting = "vanilla" if is_vanilla else "crafted"
     formatted_response = (
         "import pytest\n"
-        f"from {task_id}_{type_prompting}.py import {testing_function}\n\n"
+        f"from {task_id}_{type_prompting} import {testing_function}\n\n"
     )
     for line in lines:
         func_name = get_function_name(line)
