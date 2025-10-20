@@ -97,6 +97,10 @@ def prune_asserts(asserts, function_name):
         if after_paren != "":
             continue
 
+        num_quotes = expected_val.count("\"")
+        if num_quotes % 2 != 0:
+            continue
+
         pruned_asserts.append(assertion + "\n")
     
     if len(pruned_asserts) == 0:
