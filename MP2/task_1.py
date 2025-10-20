@@ -16,6 +16,13 @@ def save_file(content, file_path):
     with open(file_path, 'w') as file:
         file.write(content)
 
+def get_function_header(prompt_str):
+    splitted = prompt_str.split("\n")
+    for elem in splitted:
+        if elem != "":
+            return elem + "\n"
+    return ""
+
 # Extract first test case from the test string
 def extract_test_case(test_string):
     lines = test_string.strip().split('\n')
@@ -110,7 +117,7 @@ def prompt_model(dataset, model_name = "deepseek-ai/deepseek-coder-6.7b-instruct
 If the input is {test_input}, what will the following code return?
 The return value prediction must be enclosed between [Output] and [/Output] tags. For example : [Output]prediction[/Output]
 
-{entry['prompt']}
+{get_function_header(entry['prompt'])}
 {entry['canonical_solution']}
 
 ### Response:
