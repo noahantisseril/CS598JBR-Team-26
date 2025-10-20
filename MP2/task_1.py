@@ -16,6 +16,13 @@ def save_file(content, file_path):
     with open(file_path, 'w') as file:
         file.write(content)
 
+def get_function_header(prompt_str):
+    splitted = prompt_str.split("\n")
+    for elem in splitted:
+        if elem != "":
+            return elem + "\n"
+    return ""
+
 # Extract first test case from the test string
 def extract_test_case(test_string):
     lines = test_string.strip().split('\n')
@@ -65,11 +72,11 @@ def smart_parse(s):
 
 # Extract the output from between the [Output] [/Output] tags
 def extract_output_from_response(response):
-    match = re.search(r'\[Output\](.*?)\[/?Output\]', response, re.IGNORECASE | re.DOTALL)
+    match = re.search(r'\[Output\](.*?)\[/Output\]', response, re.IGNORECASE | re.DOTALL)
     if match:
         ret_string = match.group(1).strip()
-        if ret_string and (ret_string[0] == "(" and ret_string[-1] == ")"):
-            return ret_string[1:-1]
+        # if ret_string and (ret_string[0] == "(" and ret_string[-1] == ")"):
+        #     return ret_string[1:-1]
         return ret_string
     return None
 
@@ -118,6 +125,7 @@ The return value prediction must be enclosed between [Output] and [/Output] tags
         
         if not vanilla:
             prompt = f"""You are an AI programming assistant specialized in Computer Science. Utilizing the DeepSeek Coder model, you will answer questions related to computer science. For politically sensitive questions, security and privacy issues, and other non-computer science questions, you will refuse to answer.
+
 ### Instruction:
 Determine the return value of the code for the given input.
 
@@ -130,26 +138,19 @@ Output format (STRICT):
 - Do NOT include backticks or single quotes.
 - Use canonical Python literals for values (e.g., True/False, double-quote strings, correct repr spacing).
 
-Reason **silently** before answering:
+Reason before answering:
 - Identify the function(s) used by the input and trace execution step-by-step.
 - Track variable updates, loops, branches, early returns, and mutations.
 - Watch for edge cases: empty/zero, off-by-one, integer vs float division, slicing, truthiness, duplicates.
 - Use the provided tests only to infer exact **type/format** of the return value.
-- Compute for the real input specified after '### Final Input:' only.
+- Compute the final value and then output it in the required tags.
 
 Code:
+
 {entry['prompt']}
 {entry['canonical_solution']}
 
-Example testcase:
-"""
-            for inp, outp in testcases:
-                prompt += f"\nInput: {inp}, Output: [Output]{outp}[/Output]\n"
-                break
-
-            prompt += f"""
-
-### Final Input:
+Input:
 {test_input}
 
 ### Response:
@@ -162,7 +163,7 @@ Example testcase:
             outputs = model.generate(
                 **inputs,
                 max_new_tokens=1000,
-                temperature=0.1,
+                temperature=0.0,
                 do_sample=False,
                 pad_token_id=tokenizer.eos_token_id
             )
