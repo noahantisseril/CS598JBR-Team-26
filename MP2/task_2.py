@@ -64,8 +64,8 @@ def prompt_model(dataset, model_name = "deepseek-ai/deepseek-coder-6.7b-instruct
 
     for entry in dataset:
         task_id = entry["task_id"].replace("/", "_")
-        code_file = f"{task_id}.py"
-        test_file = f"{task_id}_test.py"
+        code_file = f"{task_id}_{'vanilla' if vanilla else 'crafted'}.py"
+        test_file = f"{task_id}_test_{'vanilla' if vanilla else 'crafted'}.py"
         coverage_file = f"Coverage/{task_id}_test_{'vanilla' if vanilla else 'crafted'}.json"
         full_code = entry['prompt'] + "\n" + entry['canonical_solution']
         save_file(full_code, code_file)
