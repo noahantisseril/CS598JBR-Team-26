@@ -5,6 +5,7 @@ import sys
 import torch
 import ast
 from transformers import AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig
+import re
 
 #####################################################
 # Please finish all TODOs in this file for MP2;
@@ -34,6 +35,7 @@ def create_prompt(entry, task_id, vanilla=True):
             "- Write multiple test functions (e.g., `def test_case_1():`, `def test_case_2():`).\n"
             "- Cover at least 5 cases including typical inputs, edge cases, empty inputs, negative inputs, and unusual inputs.\n"
             "- Ensure high branch and line coverage; include all execution paths.\n"
+            "- Check for no syntax errors. Think about the cases step by step.\n"
         )
 
 
@@ -64,39 +66,40 @@ def remove_unterminated_last_line(text):
 
 def drop_invalid_tests(test_content):
     """
-    Parse test file using AST and drop invalid test functions.
-    Keeps imports and valid `def test_*` functions only.
+    Cleans a test file string by:
+      - Removing everything before the first `import pytest`
+      - Keeping only valid import statements and valid test_ functions
+      - Skipping malformed or incomplete test functions
     """
-    valid_parts = []
-    lines = test_content.splitlines(keepends=True)
+    # Keep only code starting at first import
+    match = re.search(r"import pytest", test_content)
+    if match:
+        test_content = test_content[match.start():]
 
-    # Keep top-level imports (simple heuristic)
+    lines = test_content.splitlines(keepends=True)
+    valid_parts = []
+
+    # Keep top-level imports
     for line in lines:
         if line.strip().startswith("import") or line.strip().startswith("from"):
             valid_parts.append(line)
 
-    # Parse the file into an AST
-    try:
-        tree = ast.parse(test_content)
-        # If this works, no need to clean anything
-        return test_content
-    except SyntaxError:
-        pass  # We'll do selective parsing below
+    # Split roughly by test function definitions
+    func_chunks = re.split(r"(?=^def test_)", test_content, flags=re.MULTILINE)
 
-    # If the full parse failed, try extracting test functions individually
-    module = ast.parse("")  # empty fallback
-    for node in ast.walk(ast.parse("\n".join(lines))):
-        if isinstance(node, ast.FunctionDef) and node.name.startswith("test_"):
-            # Extract corresponding source code
-            start = node.lineno - 1
-            end = getattr(node, "end_lineno", None)
-            func_source = "".join(lines[start:end]) if end else lines[start]
-            try:
-                ast.parse(func_source)
-                valid_parts.append("\n" + func_source + "\n")
-            except SyntaxError:
-                # skip invalid test functions
-                continue
+    for chunk in func_chunks:
+        chunk = chunk.strip()
+        if not chunk.startswith("def test_"):
+            continue
+        # Ensure it has some indentation after the def line
+        if not re.search(r"\n\s+", chunk):
+            # e.g., def test_case_18(): with no body
+            continue
+        try:
+            ast.parse(chunk)
+            valid_parts.append("\n" + chunk + "\n")
+        except (SyntaxError, IndentationError):
+            continue  # skip broken ones
 
     return "".join(valid_parts)
 
@@ -141,9 +144,9 @@ def prompt_model(dataset, model_name = "deepseek-ai/deepseek-coder-6.7b-instruct
         with torch.no_grad():
             output_ids = model.generate(
                 **inputs,
-                max_new_tokens=512,
-                temperature=0.7,
-                do_sample=True,
+                max_new_tokens=1000,
+                temperature=0.0,
+                do_sample=False,
                 top_p=0.95
             )
 
