@@ -138,7 +138,7 @@ Output format (STRICT):
 - Do NOT include backticks or single quotes.
 - Use canonical Python literals for values (e.g., True/False, double-quote strings, correct repr spacing).
 
-Reason **silently** before answering:
+Reason before answering:
 - Identify the function(s) used by the input and trace execution step-by-step.
 - Track variable updates, loops, branches, early returns, and mutations.
 - Watch for edge cases: empty/zero, off-by-one, integer vs float division, slicing, truthiness, duplicates.
