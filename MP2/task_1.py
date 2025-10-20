@@ -65,7 +65,7 @@ def smart_parse(s):
 
 # Extract the output from between the [Output] [/Output] tags
 def extract_output_from_response(response):
-    match = re.search(r'\[Output\](.*?)\[/?Output\]', response, re.IGNORECASE | re.DOTALL)
+    match = re.search(r'\[Output\](.*?)\[/Output\]', response, re.IGNORECASE | re.DOTALL)
     if match:
         ret_string = match.group(1).strip()
         # if ret_string and (ret_string[0] == "(" and ret_string[-1] == ")"):
