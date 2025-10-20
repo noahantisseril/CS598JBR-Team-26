@@ -16,13 +16,6 @@ def save_file(content, file_path):
     with open(file_path, 'w') as file:
         file.write(content)
 
-def get_function_header(prompt_str):
-    splitted = prompt_str.split("\n")
-    for elem in splitted:
-        if elem != "":
-            return elem + "\n"
-    return ""
-
 # Extract first test case from the test string
 def extract_test_case(test_string):
     lines = test_string.strip().split('\n')
@@ -37,13 +30,12 @@ def extract_test_case(test_string):
                 
                 # Extract until comma outside brackets
                 expected_output = extract_until_comma_outside_brackets(rest)
-                output.append((input_part, expected_output))
-    return output
+                return input_part, expected_output
+    return "incorrect", "correct"
 
 def extract_until_comma_outside_brackets(text):
     bracket_depth = 0
     result = []
-    
     for char in text:
         if char == '[':
             bracket_depth += 1
@@ -55,10 +47,15 @@ def extract_until_comma_outside_brackets(text):
             break
         else:
             result.append(char)
-    
     return ''.join(result).strip()
 
-def smart_parse(s):
+# Function handles AST parsing
+# This solves many problematic parsing cases by converting to python literals
+# If AST parsing fails, return the original string
+# Some examples this helps with:
+# [1, 2, 3, 4] = [1,2,3,4]
+# [1.0, 2.0, 3.0, 4.0] = [1, 2, 3, 4]
+def ast_parse(s):
     if s is None:
         return None
     s = s.strip()
@@ -75,8 +72,6 @@ def extract_output_from_response(response):
     match = re.search(r'\[Output\](.*?)\[/Output\]', response, re.IGNORECASE | re.DOTALL)
     if match:
         ret_string = match.group(1).strip()
-        # if ret_string and (ret_string[0] == "(" and ret_string[-1] == ")"):
-        #     return ret_string[1:-1]
         return ret_string
     return None
 
@@ -103,11 +98,7 @@ def prompt_model(dataset, model_name = "deepseek-ai/deepseek-coder-6.7b-instruct
     
     results = []
     for entry in dataset:
-        testcases = extract_test_case(entry['test'])
-        test_input, expected_output = "1", "2" # dont let them match by default
-        if testcases:
-            test_input, expected_output = testcases[0]
-            testcases.pop(0)
+        test_input, expected_output = extract_test_case(entry['test'])
         # TODO: create prompt for the model
         # Tip : Use can use any data from the dataset to create 
         #       the prompt including prompt, canonical_solution, test, etc.
@@ -176,10 +167,7 @@ Input:
         # and formatting for python literals.
         # With this approach, the string is parsed to a python literal before comparison.
         # This prevents slight string inconsistencies from changing answer correctness
-        verdict = smart_parse(predicted_output) == smart_parse(expected_output)
-        # verdict = ast.literal_eval(predicted_output) == ast.literal_eval(expected_output)
-        if not verdict:
-            print("Mismatch:\n", predicted_output, expected_output)
+        verdict = ast_parse(predicted_output) == ast_parse(expected_output)
 
         print(f"Task_ID {entry['task_id']}:\nprompt:\n{prompt}\nresponse:\n{response}\nis_correct:\n{verdict}")
         results.append({
