@@ -41,10 +41,15 @@ def rebuild_func(asserts, func_name):
         ans += f"\t{assertion}"
     return ans + "\n\n"
 
-def format_response(response, testing_function):
+def format_response(response, testing_function, task_id, is_vanilla):
     lines = response.split("\n")
     curr_func = ""
     curr_asserts = []
+    type_prompting = "vanilla" if is_vanilla else "crafted"
+    formatted_response = (
+        "import pytest\n"
+        f"from {task_id}_{type_prompting}.py import {testing_function}\n\n"
+    )
     formatted_response = "import pytest\n\n"
     for line in lines:
         func_name = get_function_name(line)
@@ -108,8 +113,8 @@ def create_prompt(entry, task_id, vanilla=True):
         "security and privacy issues, and other non-computer science questions, you will refuse to answer.\n\n"
         "### Instruction:\n"
         "Generate a pytest test suite for the following code.\n\n"
-        "Only write unit tests in the output and nothing else."
-        f"Import the function from the module `{task_id}_{'vanilla' if vanilla else 'crafted'}.py` instead of redefining it.\n\n"
+        "Only write unit tests in the output and nothing else.\n\n"
+        # f"Import the function from the module `{task_id}_{'vanilla' if vanilla else 'crafted'}.py` instead of redefining it.\n\n"
     )
 
     if not vanilla:
@@ -298,7 +303,7 @@ def prompt_model(dataset, model_name = "deepseek-ai/deepseek-coder-6.7b-instruct
         response = output_text.split("### Response:")[-1].strip()
         response = split_asserts_into_tests(response)
 
-        response = format_response(response, function_name)
+        response = format_response(response, function_name, task_id, vanilla)
 
         # # Strip ```python or ``` if they exist
         # if response.startswith("```python"):
