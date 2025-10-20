@@ -117,45 +117,39 @@ The return value prediction must be enclosed between [Output] and [/Output] tags
 """
         
         if not vanilla:
-            prompt = f"""
+            prompt = f"""You are an AI programming assistant specialized in Computer Science. Utilizing the DeepSeek Coder model, you will answer questions related to computer science. For politically sensitive questions, security and privacy issues, and other non-computer science questions, you will refuse to answer.
 ### Instruction:
-Determine the return value of the given Python function for the given input.
+Determine the return value of the code for the given input.
 
-The return value prediction MUST be enclosed between [Output] and [/Output] tags.
-
-Here is a sample output: [Output]<return value>[/Output]
-
-Follow the steps outlined in the thought process section.
-
-Thought process:
-- Trace the executed path step-by-step (functions called, loops, branches, early returns).
-- Compute all intermediate values exactly using **Python semantics** (/, //, %, **, slicing).
-- When comparing numbers, perform an explicit numeric check (no heuristics, no string/lexicographic logic). 
-- Cross-check with 1-2 nearby sanity cases from the provided tests to confirm **type and format**.
-- If any check contradicts earlier steps, re-trace and fix before answering.
-- Once a final value is found, check if the value makes logical sense given the input and problem statement
-- Output only the final value in the required tags.
+The return value prediction must be enclosed between [Output] and [/Output] tags.
 
 Output format (STRICT):
-- ONLY use canonical Python literals for return values (e.g., True/False, Lists, None, double quotes for strings).
-- The output MUST be between [Output] and [/Output] tags
+- Your ENTIRE response must be exactly one line in the form:
+  [Output]<value>[/Output]
+- Do NOT include any other text, explanations, or code.
 - Do NOT include backticks or single quotes.
-- Infer the return type/format using the examples provided
+- Use canonical Python literals for values (e.g., True/False, double-quote strings, correct repr spacing).
 
-Clearly and explicitly outline your thought process, adhering to the above guidelines.
+Reason **silently** before answering:
+- Identify the function(s) used by the input and trace execution step-by-step.
+- Track variable updates, loops, branches, early returns, and mutations.
+- Watch for edge cases: empty/zero, off-by-one, integer vs float division, slicing, truthiness, duplicates.
+- Use the provided tests only to infer exact **type/format** of the return value.
+- Compute for the real input specified after '### Final Input:' only.
 
 Code:
-
 {entry['prompt']}
 {entry['canonical_solution']}
 
-Example testcases:
+Example testcase:
 """
             for inp, outp in testcases:
                 prompt += f"\nInput: {inp}, Output: [Output]{outp}[/Output]\n"
+                break
 
             prompt += f"""
-Now determine the output for this input:
+
+### Final Input:
 {test_input}
 
 ### Response:

@@ -22,27 +22,14 @@ def create_prompt(entry, task_id, vanilla=True):
         "### Instruction:\n"
         "Generate a pytest test suite for the following code.\n\n"
         "Only write unit tests in the output and nothing else."
+        f"Import the function from the module `{task_id}.py` instead of redefining it.\n\n"
     )
 
     if not vanilla:
-        # base_prompt += (
-        #     "The input code includes the full function definition (signature + body).\n\n"
-        #     "Write tests specifically for this function.\n\n"
-        #     "Generate comprehensive tests that achieve high branch and line coverage. "
-        #     "Ensure the generated tests cover all execution paths in the code.\n\n"
-        #     "IMPORTANT:\n"
-        #     "- Only provide runnable Python code starting with `import pytest`.\n"
-        #     # "- Do NOT include any explanations, comments, or sentences before or after the code.\n"
-        #     "- Write multiple test functions (e.g., `def test_case_1():`, `def test_case_2():`, etc.) "
-        #     "with each function testing a different input scenario.\n"
-        #     "- The output should be directly executable as a test file.\n\n"
-        #     "- Ensure there are at least 5 separate test cases covering typical, edge, empty, negative, and unusual inputs.\n\n"
-        # )
         base_prompt += (
             "The input code includes the full function definition (signature + body).\n"
             "Only write unit tests. Do not include explanations, comments, or extra text.\n"
             "\n### Test Requirements:\n"
-            f"Import the function from the module `{task_id}.py` instead of redefining it.\n\n"
             "- Write multiple test functions (e.g., `def test_case_1():`, `def test_case_2():`).\n"
             "- Cover at least 5 cases including typical inputs, edge cases, empty inputs, negative inputs, and unusual inputs.\n"
             "- Ensure high branch and line coverage; include all execution paths.\n"
@@ -74,9 +61,9 @@ def prompt_model(dataset, model_name = "deepseek-ai/deepseek-coder-6.7b-instruct
     )
     
     results = []
-    # change this back
-    for entry in dataset[:1]:
-        task_id = entry["task_id"].split("/")[-1]
+
+    for entry in dataset:
+        task_id = entry["task_id"].replace("/", "_")
         code_file = f"{task_id}.py"
         test_file = f"{task_id}_test.py"
         coverage_file = f"Coverage/{task_id}_test_{'vanilla' if vanilla else 'crafted'}.json"
@@ -114,6 +101,10 @@ def prompt_model(dataset, model_name = "deepseek-ai/deepseek-coder-6.7b-instruct
         idx = response.find("import pytest")
         if idx != -1:
             response = response[idx:]  # Keep everything from 'import pytest' onwards
+
+        idx = response.find("```")
+        if idx != -1:
+            response = response[:idx].strip()
 
         save_file(response, test_file)
 
