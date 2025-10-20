@@ -119,7 +119,7 @@ def prompt_model(dataset, model_name = "deepseek-ai/deepseek-coder-6.7b-instruct
                 ],
                 capture_output=True,
                 text=True,
-                timeout=60
+                # timeout=60
             )
 
             print(result.stdout)
