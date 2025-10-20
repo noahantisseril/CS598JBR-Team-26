@@ -114,7 +114,7 @@ def prompt_model(dataset, model_name = "deepseek-ai/deepseek-coder-6.7b-instruct
                 [
                     "pytest",
                     test_file,
-                    f"--cov={task_id}",
+                    f"--cov={task_id}_{'vanilla' if vanilla else 'crafted'}",
                     f"--cov-report=json:{coverage_file}"
                 ],
                 capture_output=True,
