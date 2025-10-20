@@ -1,1 +1,0 @@
-Sure, here are the pytest test cases for the given function:

@@ -22,7 +22,7 @@ def create_prompt(entry, task_id, vanilla=True):
         "### Instruction:\n"
         "Generate a pytest test suite for the following code.\n\n"
         "Only write unit tests in the output and nothing else."
-        f"Import the function from the module `{task_id}.py` instead of redefining it.\n\n"
+        f"Import the function from the module `{task_id}_{'vanilla' if vanilla else 'crafted'}.py` instead of redefining it.\n\n"
     )
 
     if not vanilla:
