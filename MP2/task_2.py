@@ -62,7 +62,7 @@ def format_response(response, testing_function, task_id, is_vanilla):
             curr_asserts.append(line.strip())
     if curr_func != "":
         pruned_asserts = prune_asserts(curr_asserts, testing_function)
-        formatted_response += rebuild_func(curr_asserts, curr_func)
+        formatted_response += rebuild_func(pruned_asserts, curr_func)
     return formatted_response
 
 def prune_asserts(asserts, function_name):
@@ -118,9 +118,8 @@ def create_prompt(entry, task_id, vanilla=True):
 
     if not vanilla:
         base_prompt += (
-            "The input code includes the full function definition (signature + body).\n"
-            "Only write unit tests. Do not include explanations, comments, or extra text.\n"
             "\n### Test Requirements:\n"
+            "- DO NOT REWRITE THE FUNCTION THAT IS BEING TESTED, assume it exists and is imported"
             "- Write multiple test functions (e.g., `def test_case_1():`, `def test_case_2():`).\n"
             "- Cover at least 5 cases including typical inputs, edge cases, empty inputs, negative inputs, and unusual inputs.\n"
             "- Ensure high branch and line coverage; include all execution paths.\n"
