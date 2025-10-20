@@ -149,6 +149,62 @@ def remove_unterminated_last_line(text):
 
     return "\n".join(lines) + "\n"
 
+def split_asserts_into_tests(test_content: str) -> str:
+    """
+    Splits multi-assert test functions into multiple pytest test functions.
+    Example:
+        def test_foo():
+            assert f(1) == 2
+            assert f(2) == 3
+    becomes:
+        def test_foo_case_1():
+            assert f(1) == 2
+
+        def test_foo_case_2():
+            assert f(2) == 3
+    """
+    lines = test_content.splitlines(keepends=True)
+    output = []
+    inside_func = False
+    func_name = None
+    asserts = []
+    indent = "    "
+
+    for line in lines:
+        stripped = line.strip()
+
+        # Detect the start of a test function
+        if stripped.startswith("def test_"):
+            inside_func = True
+            func_name = re.match(r"def\s+(\w+)\s*\(", stripped).group(1)
+            asserts = []
+            continue  # don’t include the original def line
+
+        # Detect end of function or blank line after function
+        if inside_func and (not stripped or not line.startswith(indent)):
+            # Emit multiple test_ functions for each assert
+            for i, a in enumerate(asserts, 1):
+                output.append(f"\ndef {func_name}_case_{i}():\n{indent}{a}\n")
+            inside_func = False
+            func_name = None
+            asserts = []
+
+        # Collect assert lines
+        if inside_func and stripped.startswith("assert "):
+            asserts.append(stripped)
+            continue
+
+        # Copy imports and everything outside test_ functions
+        if not inside_func:
+            output.append(line)
+
+    # Handle case where file ends inside a test
+    if inside_func and asserts:
+        for i, a in enumerate(asserts, 1):
+            output.append(f"\ndef {func_name}_case_{i}():\n{indent}{a}\n")
+
+    return "".join(output)
+
 def drop_invalid_tests(test_content):
     """
     Cleans a test file string by:
@@ -240,6 +296,7 @@ def prompt_model(dataset, model_name = "deepseek-ai/deepseek-coder-6.7b-instruct
 
         output_text = tokenizer.decode(output_ids[0], skip_special_tokens=True)
         response = output_text.split("### Response:")[-1].strip()
+        response = split_asserts_into_tests(response)
 
         response = format_response(response, function_name)
 
