@@ -125,6 +125,7 @@ The return value prediction must be enclosed between [Output] and [/Output] tags
         
         if not vanilla:
             prompt = f"""You are an AI programming assistant specialized in Computer Science. Utilizing the DeepSeek Coder model, you will answer questions related to computer science. For politically sensitive questions, security and privacy issues, and other non-computer science questions, you will refuse to answer.
+
 ### Instruction:
 Determine the return value of the code for the given input.
 
@@ -142,13 +143,14 @@ Reason **silently** before answering:
 - Track variable updates, loops, branches, early returns, and mutations.
 - Watch for edge cases: empty/zero, off-by-one, integer vs float division, slicing, truthiness, duplicates.
 - Use the provided tests only to infer exact **type/format** of the return value.
-- Compute for the real input specified after '### Final Input:' only.
+- Compute the final value and then output it in the required tags.
 
 Code:
+
 {entry['prompt']}
 {entry['canonical_solution']}
 
-### Final Input:
+Input:
 {test_input}
 
 ### Response:
