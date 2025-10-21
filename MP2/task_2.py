@@ -3,7 +3,6 @@ import subprocess
 import jsonlines
 import sys
 import torch
-import ast
 from transformers import AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig
 import re
 
@@ -114,7 +113,6 @@ def create_prompt(entry, task_id, vanilla=True):
         "### Instruction:\n"
         "Generate a pytest test suite for the following code.\n\n"
         "Only write unit tests in the output and nothing else.\n\n"
-        # f"Import the function from the module `{task_id}_{'vanilla' if vanilla else 'crafted'}.py` instead of redefining it.\n\n"
     )
 
     if not vanilla:
@@ -131,28 +129,6 @@ def create_prompt(entry, task_id, vanilla=True):
 
     base_prompt += f"{entry['prompt'] + "\n" + entry['canonical_solution']}\n\n### Response:\n"
     return base_prompt
-
-def remove_unterminated_last_line(text):
-    lines = text.rstrip().splitlines()
-    if not lines:
-        return text
-
-    last_line = lines[-1]
-
-    # Check for unterminated syntax characters
-    openers = "([{"
-    closers = ")]}"
-    quotes = "\"'"
-
-    # Basic syntax balance check
-    if (
-        any(ch in last_line for ch in openers)
-        and not any(ch in last_line for ch in closers)
-    ) or (last_line.count('"') % 2 == 1) or (last_line.count("'") % 2 == 1):
-        # Remove last line if it looks incomplete
-        lines = lines[:-1]
-
-    return "\n".join(lines) + "\n"
 
 def split_asserts_into_tests(test_content: str) -> str:
     """
@@ -210,45 +186,6 @@ def split_asserts_into_tests(test_content: str) -> str:
 
     return "".join(output)
 
-def drop_invalid_tests(test_content):
-    """
-    Cleans a test file string by:
-      - Removing everything before the first `import pytest`
-      - Keeping only valid import statements and valid test_ functions
-      - Skipping malformed or incomplete test functions
-    """
-    # Keep only code starting at first import
-    match = re.search(r"import pytest", test_content)
-    if match:
-        test_content = test_content[match.start():]
-
-    lines = test_content.splitlines(keepends=True)
-    valid_parts = []
-
-    # Keep top-level imports
-    for line in lines:
-        if line.strip().startswith("import") or line.strip().startswith("from"):
-            valid_parts.append(line)
-
-    # Split roughly by test function definitions
-    func_chunks = re.split(r"(?=^def test_)", test_content, flags=re.MULTILINE)
-
-    for chunk in func_chunks:
-        chunk = chunk.strip()
-        if not chunk.startswith("def test_"):
-            continue
-        # Ensure it has some indentation after the def line
-        if not re.search(r"\n\s+", chunk):
-            # e.g., def test_case_18(): with no body
-            continue
-        try:
-            ast.parse(chunk)
-            valid_parts.append("\n" + chunk + "\n")
-        except (SyntaxError, IndentationError):
-            continue  # skip broken ones
-
-    return "".join(valid_parts)
-
 def prompt_model(dataset, model_name = "deepseek-ai/deepseek-coder-6.7b-instruct", vanilla = True):
     print(f"Working with {model_name} prompt type {vanilla}...")
     
@@ -305,25 +242,6 @@ def prompt_model(dataset, model_name = "deepseek-ai/deepseek-coder-6.7b-instruct
 
         response = format_response(response, function_name, task_id, vanilla)
 
-        # # Strip ```python or ``` if they exist
-        # if response.startswith("```python"):
-        #     response = response[len("```python"):].strip()
-        # if response.startswith("```"):
-        #     response = response[len("```"):].strip()
-        # if response.endswith("```"):
-        #     response = response[:-len("```")].strip()
-
-        # # Find the first occurrence of 'import pytest'
-        # idx = response.find("import pytest")
-        # if idx != -1:
-        #     response = response[idx:]  # Keep everything from 'import pytest' onwards
-
-        # idx = response.find("```")
-        # if idx != -1:
-        #     response = response[:idx].strip()
-
-        # response = drop_invalid_tests(remove_unterminated_last_line(response))
-
         save_file(response, test_file)
 
         # TODO: process the response, generate coverage and save it to results
@@ -337,7 +255,6 @@ def prompt_model(dataset, model_name = "deepseek-ai/deepseek-coder-6.7b-instruct
                 ],
                 capture_output=True,
                 text=True,
-                # timeout=60
             )
 
             print(result.stdout)
