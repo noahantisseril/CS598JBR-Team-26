@@ -119,10 +119,13 @@ def create_prompt(entry, task_id, vanilla=True):
 
     if not vanilla:
         base_prompt += (
-            "\n### Test Requirements:\n"
-            "- DO NOT REWRITE THE FUNCTION THAT IS BEING TESTED, assume it exists and is imported.\n"
-            "- Be mindful of code time complexity. Don't use large inputs for slow operations\n"
-            "- Generate at least 5 test cases that test all execution paths\n"
+            "\n**Test Requirements:**\n"
+            "- DO NOT REWRITE THE FUNCTION THAT IS BEING TESTED; assume it exists and is imported.\n"
+            "- Be mindful of runtime; avoid very large inputs or slow operations.\n"
+            "- Write at least 5 focused tests that together cover **all branches, edge conditions, and error cases**.\n"
+            "- Include representative inputs: normal, boundary, empty/zero, and invalid types if relevant.\n"
+            "- Use precise `assert` statements verifying the **exact expected outputs** with double equal signs for equality checking.\n"
+            "- Follow correct Python syntax and indentation.\n"
         )
 
 
