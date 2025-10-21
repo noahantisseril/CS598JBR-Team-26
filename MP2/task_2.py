@@ -82,9 +82,6 @@ def prune_asserts(asserts, function_name):
         
         after_assert = curr_assert[6:].strip()  # "assert" is 6 chars
         
-        if not after_assert.startswith(function_name):
-            continue
-        
         after_function = after_assert[len(function_name):].strip()
         if not after_function.startswith("("):
             continue
@@ -125,9 +122,10 @@ def create_prompt(entry, task_id, vanilla=True):
             "\n### Test Requirements:\n"
             "- DO NOT REWRITE THE FUNCTION THAT IS BEING TESTED, assume it exists and is imported"
             "- Write multiple test functions (e.g., `def test_case_1():`, `def test_case_2():`).\n"
-            "- Cover at least 5 cases including typical inputs, edge cases, empty inputs, negative inputs, and unusual inputs.\n"
+            "- Cover at least 5 cases including typical inputs, edge cases, empty inputs, negative inputs.\n"
             "- Ensure high branch and line coverage; include all execution paths.\n"
             "- Check for no syntax errors. Think about the cases step by step.\n"
+            "- Keep numeric inputs small (integers in [-9, 9]) to prevent long runtimes.\n"
         )
 
 
