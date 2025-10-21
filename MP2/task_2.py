@@ -121,17 +121,8 @@ def create_prompt(entry, task_id, vanilla=True):
         base_prompt += (
             "\n### Test Requirements:\n"
             "- DO NOT REWRITE THE FUNCTION THAT IS BEING TESTED, assume it exists and is imported.\n"
-            "- Write multiple test functions (e.g., `def test_case_1():`, `def test_case_2():`).\n"
-            "- Cover at least 5 cases including typical inputs, edge cases, empty inputs, negative inputs.\n"
-            "- Ensure high branch and line coverage; include all execution paths.\n"
-            "- Check for no syntax errors. Think about the cases step by step.\n"
-            "\n### Performance Constraints:\n"
-            "- CRITICAL: Consider computational complexity when selecting test input values.\n"
-            "- For functions with exponential or factorial complexity (recursive Fibonacci, prime checking, "
-            "combinatorial operations, nested loops over large ranges), keep input values SMALL.\n"
-            "- Use n < 10 for exponential operations, n < 15 for operations involving primes or factorials.\n"
-            "- Small inputs are sufficient to verify correctness. Large inputs may cause test timeouts.\n"
-            "- Example: For nth prime Fibonacci, test with values like 1, 2, 3, 5, 7 instead of 20, 30, 50.\n"
+            "- Be mindful of code time complexity. Don't use large inputs for slow operations\n"
+            "- Generate at least 5 test cases that test all execution paths\n"
         )
 
 
