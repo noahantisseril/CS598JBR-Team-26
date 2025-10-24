@@ -265,7 +265,7 @@ def prompt_model(dataset, model_name = "deepseek-ai/deepseek-coder-6.7b-instruct
             if os.path.exists(coverage_file):
                 with open(coverage_file, "r") as f:
                     cov_json = f.read()
-                    coverage = cov_json
+                    coverage = cov_json["totals"]["percent_covered"]
 
         except subprocess.TimeoutExpired:
             coverage = "TimeoutError: pytest execution took too long."
