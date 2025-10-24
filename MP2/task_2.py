@@ -5,6 +5,7 @@ import sys
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig
 import re
+import json
 
 #####################################################
 # Please finish all TODOs in this file for MP2;
@@ -264,7 +265,7 @@ def prompt_model(dataset, model_name = "deepseek-ai/deepseek-coder-6.7b-instruct
             coverage = None
             if os.path.exists(coverage_file):
                 with open(coverage_file, "r") as f:
-                    cov_json = f.read()
+                    cov_json = json.load(f)
                     coverage = cov_json["totals"]["percent_covered"]
 
         except subprocess.TimeoutExpired:
