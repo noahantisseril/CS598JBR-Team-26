@@ -273,7 +273,7 @@ def prompt_model(dataset, model_name = "deepseek-ai/deepseek-coder-6.7b-instruct
         except Exception as e:
             coverage = f"Error running pytest: {e}"
 
-        print(f"Task_ID {entry['task_id']}:\nprompt:\n{prompt}\nresponse:\n{response}\ncoverage:\n{coverage if isinstance(coverage, str) else 'OK'}")
+        print(f"Task_ID {entry['task_id']}:\nprompt:\n{prompt}\nresponse:\n{response}\ncoverage:\n{coverage}")
         results.append({
             "task_id": entry["task_id"],
             "prompt": prompt,
