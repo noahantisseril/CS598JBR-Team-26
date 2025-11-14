@@ -11,6 +11,18 @@ def save_file(content, file_path):
     with open(file_path, 'w') as file:
         file.write(content)
 
+def get_vanilla_prompt(python_code):
+    return f"""You are an AI programming assistant utilizing the DeepSeek Coder model, developed by DeepSeek Company, and you only answer questions related to computer science. For politically sensitive questions, security and privacy issues, and other non-computer science questions, you will refuse to answer.
+
+### Instruction:
+Can you translate the following Python code into Java?
+The new Java code must be enclosed between [Java Start] and [Java End]
+
+{python_code}
+
+### Response:
+"""
+
 def prompt_model(dataset, model_name = "deepseek-ai/deepseek-coder-6.7b-instruct", vanilla = True):
     print(f"Working with {model_name} prompt type {vanilla}...")
     
@@ -37,7 +49,7 @@ def prompt_model(dataset, model_name = "deepseek-ai/deepseek-coder-6.7b-instruct
         # TODO: create prompt for the model
         # Tip : Use can use any data from the dataset to create 
         #       the prompt including prompt, canonical_solution, test, etc.
-        prompt = ""
+        prompt = get_vanilla_prompt(python_code)
         
         # TODO: prompt the model and get the response
         inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
