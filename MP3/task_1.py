@@ -29,6 +29,7 @@ The new Java code must be enclosed between [Java Start] and [Java End]
 {python_code}
 
 ### Response:
+[Java Start]
 """
 
 def prompt_model(python_dataset, java_dataset, model_name = "deepseek-ai/deepseek-coder-6.7b-instruct", vanilla = True):
