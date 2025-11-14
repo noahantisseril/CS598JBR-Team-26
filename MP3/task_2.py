@@ -57,10 +57,11 @@ def get_prompt(entry, vanilla):
             """
     
 def parse_response(response):
-    pattern = r'\<start\>(.*?)\<end\>'
-    match = re.search(pattern, response, re.DOTALL | re.IGNORECASE)
+    match = re.search(r'<start>(.*?)<end>', response, re.DOTALL | re.IGNORECASE)
+    print("match", match)
     if match:
         verdict = match.group(1).strip().lower()
+        print("verdict", verdict)
         if verdict == "buggy":
             return True
         elif verdict == "correct":
