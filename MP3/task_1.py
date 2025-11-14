@@ -31,7 +31,7 @@ The new Java code must be enclosed between [Java Start] and [Java End]
 ### Response:
 """
 
-def prompt_model(dataset, model_name = "deepseek-ai/deepseek-coder-6.7b-instruct", vanilla = True):
+def prompt_model(python_dataset, java_dataset, model_name = "deepseek-ai/deepseek-coder-6.7b-instruct", vanilla = True):
     print(f"Working with {model_name} prompt type {vanilla}...")
     
     # TODO: download the model
@@ -52,8 +52,8 @@ def prompt_model(dataset, model_name = "deepseek-ai/deepseek-coder-6.7b-instruct
     )
     
     results = []
-    for entry in dataset:
-        python_code = entry['canonical_solution']
+    for entry in python_dataset:
+        python_code = entry['declaration'] + '\n' + entry['canonical_solution']
         # TODO: create prompt for the model
         # Tip : Use can use any data from the dataset to create 
         #       the prompt including prompt, canonical_solution, test, etc.
@@ -114,19 +114,21 @@ if __name__ == "__main__":
     - You can check <output_file> for detailed information.
     """
     args = sys.argv[1:]
-    input_dataset = args[0]
+    input_python_dataset = args[0]
+    input_java_dataset = "selected_humanevalx_java_82823851747266875283573544649953054055.jsonl"
     model = args[1]
     output_file = args[2]
     if_vanilla = args[3] # True or False
     
-    if not input_dataset.endswith(".jsonl"):
-        raise ValueError(f"{input_dataset} should be a `.jsonl` file!")
+    if not input_python_dataset.endswith(".jsonl"):
+        raise ValueError(f"{input_python_dataset} should be a `.jsonl` file!")
     
     if not output_file.endswith(".jsonl"):
         raise ValueError(f"{output_file} should be a `.jsonl` file!")
     
     vanilla = True if if_vanilla == "True" else False
     
-    dataset = read_jsonl(input_dataset)
-    results = prompt_model(dataset, model, vanilla)
+    python_dataset = read_jsonl(input_python_dataset)
+    java_dataset = read_jsonl(input_java_dataset)
+    results = prompt_model(python_dataset, java_dataset, model, vanilla)
     write_jsonl(results, output_file)
