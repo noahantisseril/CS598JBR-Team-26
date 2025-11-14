@@ -2,6 +2,7 @@ import jsonlines
 import sys
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig
+import re
 
 #####################################################
 # Please finish all TODOs in this file for MP3/task_2;
@@ -59,6 +60,17 @@ def get_prompt(code, vanilla):
 
             ### Response:
             """
+    
+def parse_response(response):
+    pattern = r'\<start\>(.*?)\<end\>'
+    match = re.search(pattern, response, re.DOTALL | re.IGNORECASE)
+    if match:
+        verdict = match.group(1).strip().lower()
+        if verdict == "Buggy":
+            return False
+        elif verdict == "Correct":
+            return True
+    return False
 
 def prompt_model(dataset, model_name = "deepseek-ai/deepseek-coder-6.7b-instruct", vanilla = True):
     print(f"Working with {model_name} prompt type {vanilla}...")
@@ -102,7 +114,7 @@ def prompt_model(dataset, model_name = "deepseek-ai/deepseek-coder-6.7b-instruct
         response = tokenizer.decode(outputs[0][inputs['input_ids'].shape[1]:], skip_special_tokens=True)
 
         # TODO: process the response and save it to results
-        verdict = False
+        verdict = parse_response(response)
 
         print(f"Task_ID {entry['task_id']}:\nprompt:\n{prompt}\nresponse:\n{response}\nis_expected:\n{verdict}")
         results.append({
@@ -112,6 +124,7 @@ def prompt_model(dataset, model_name = "deepseek-ai/deepseek-coder-6.7b-instruct
             "is_correct": verdict
         })
         
+
     return results
 
 def read_jsonl(file_path):

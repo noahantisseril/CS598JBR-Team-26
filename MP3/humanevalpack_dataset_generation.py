@@ -48,4 +48,5 @@ if __name__ == "__main__":
         sys.exit(1)
     seed = extract_seed_from_filename(input_file)
     output_file = "selected_humanevalpack_" + seed + ".jsonl"
+    print("output_file:", output_file)
     convert_to_humanevalpack(input_file, output_file)
