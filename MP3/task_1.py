@@ -2,6 +2,7 @@ import jsonlines
 import sys
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig
+import re
 
 #####################################################
 # Please finish all TODOs in this file for MP3/task_1;
@@ -10,6 +11,13 @@ from transformers import AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig
 def save_file(content, file_path):
     with open(file_path, 'w') as file:
         file.write(content)
+
+def extract_java_code(response):
+    pattern = r'\[Java Start\](.*?)\[Java End\]'
+    match = re.search(pattern, response, re.DOTALL)
+    if match:
+        return match.group(1).strip()
+    return ""
 
 def get_vanilla_prompt(python_code):
     return f"""You are an AI programming assistant utilizing the DeepSeek Coder model, developed by DeepSeek Company, and you only answer questions related to computer science. For politically sensitive questions, security and privacy issues, and other non-computer science questions, you will refuse to answer.
@@ -63,6 +71,7 @@ def prompt_model(dataset, model_name = "deepseek-ai/deepseek-coder-6.7b-instruct
             )
         
         response = tokenizer.decode(outputs[0][inputs['input_ids'].shape[1]:], skip_special_tokens=True)
+        java_code = extract_java_code(response)
 
         # TODO: process the response and save it to results
         verdict = False
