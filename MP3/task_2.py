@@ -66,10 +66,10 @@ def parse_response(response):
     match = re.search(pattern, response, re.DOTALL | re.IGNORECASE)
     if match:
         verdict = match.group(1).strip().lower()
-        if verdict == "Buggy":
-            return False
-        elif verdict == "Correct":
+        if verdict == "buggy":
             return True
+        elif verdict == "correct":
+            return False
     return False
 
 def prompt_model(dataset, model_name = "deepseek-ai/deepseek-coder-6.7b-instruct", vanilla = True):
