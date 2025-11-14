@@ -57,6 +57,7 @@ def prompt_model(python_dataset, java_dataset, model_name = "deepseek-ai/deepsee
         task_id_py = entry['task_id']
         task_id_num = task_id_py.split("/")[-1]
         task_id_java = f"Java/{task_id_num}"
+        java_declaration = java_dataset[task_id_java]['declaration']
         # TODO: create prompt for the model
         # Tip : Use can use any data from the dataset to create 
         #       the prompt including prompt, canonical_solution, test, etc.
@@ -96,6 +97,13 @@ def read_jsonl(file_path):
             dataset.append(line)
     return dataset
 
+def read_jsonl2(file_path):
+    dataset = {}
+    with jsonlines.open(file_path) as reader:
+        for line in reader:
+            dataset[line['task_id']] = line
+    return dataset
+
 def write_jsonl(results, file_path):
     with jsonlines.open(file_path, "w") as f:
         for item in results:
@@ -132,6 +140,6 @@ if __name__ == "__main__":
     vanilla = True if if_vanilla == "True" else False
     
     python_dataset = read_jsonl(input_python_dataset)
-    java_dataset = read_jsonl(input_java_dataset)
+    java_dataset = read_jsonl2(input_java_dataset)
     results = prompt_model(python_dataset, java_dataset, model, vanilla)
     write_jsonl(results, output_file)
