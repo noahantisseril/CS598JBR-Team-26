@@ -11,10 +11,46 @@ def save_file(content, file_path):
     with open(file_path, 'w') as file:
         file.write(content)
 
-def get_vanilla_prompt(code):
-    return f"""You are an AI programming assistant utilizing the DeepSeek Coder model, developed by DeepSeek Company, and you only answer questions related to computer science. For politically sensitive questions, security and privacy issues, and other non-computer science questions, you will refuse to answer.
+def get_prompt(code, vanilla):
+    if vanilla:
+        return f"""You are an AI programming assistant utilizing the DeepSeek Coder model, developed by DeepSeek Company, and you only answer questions related to computer science. For politically sensitive questions, security and privacy issues, and other non-computer science questions, you will refuse to answer.
 
             ### Instruction:
+
+            {code}
+
+            Is the above code buggy or correct? Please explain your step by step reasoning. 
+            The prediction should be enclosed within <start> and <end> tags. For example: <start>Buggy<end>
+
+            ### Response:
+            """
+    else:
+        return f"""You are an AI programming assistant utilizing the DeepSeek Coder model, developed by DeepSeek Company, and you only answer questions related to computer science. For politically sensitive questions, security and privacy issues, and other non-computer science questions, you will refuse to answer.
+
+            ### Instruction:
+
+            You are given a Python function. 
+            Determine whether the implementation is **logically correct** according to standard intended behavior, unless a docstring states otherwise.
+
+            For this task, a function is **buggy** if ANY of the following are true:
+
+            - It contains incorrect logic.
+            - It incorrectly compares values (e.g., missing abs(), wrong inequality).
+            - It returns the wrong result for any input.
+            - It has mismatched behavior vs. typical expectations for the problem.
+
+            Otherwise, it is **correct**.
+
+            You MUST output one of the following two tokens only:
+            - <start>Correct<end>
+            - <start>Buggy<end>
+
+            ### Additional Requirements
+            - Before producing the final tokens, think silently and DO NOT reveal chain-of-thought.
+            - Your visible explanation must be **brief**, high-level, and must NOT show intermediate reasoning.
+            - Do NOT output anything outside the <start> and <end> tokens for the final answer.
+
+            ### Question
 
             {code}
 
@@ -50,7 +86,7 @@ def prompt_model(dataset, model_name = "deepseek-ai/deepseek-coder-6.7b-instruct
         # TODO: create prompt for the model
         # Tip : Use can use any data from the dataset to create 
         #       the prompt including prompt, canonical_solution, test, etc.
-        prompt = get_vanilla_prompt(code)
+        prompt = get_prompt(code, vanilla)
         
         # TODO: prompt the model and get the response
         inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
