@@ -54,6 +54,9 @@ def prompt_model(python_dataset, java_dataset, model_name = "deepseek-ai/deepsee
     results = []
     for entry in python_dataset:
         python_code = entry['declaration'] + '\n' + entry['canonical_solution']
+        task_id_py = entry['task_id']
+        task_id_num = task_id_py.split("/")[-1]
+        task_id_java = f"Java/{task_id_num}"
         # TODO: create prompt for the model
         # Tip : Use can use any data from the dataset to create 
         #       the prompt including prompt, canonical_solution, test, etc.
