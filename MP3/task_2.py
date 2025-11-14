@@ -35,16 +35,11 @@ def get_prompt(entry, vanilla):
 
             For this task, a function is buggy if it produces {entry["failure_symptoms"]}.
 
-            Otherwise, it is **correct**.
+            Otherwise, it is correct.
 
             You MUST output one of the following two tokens only:
             - <start>Correct<end>
             - <start>Buggy<end>
-
-            ### Additional Requirements
-            - Before producing the final tokens, think silently and DO NOT reveal chain-of-thought.
-            - Your visible explanation must be **brief**, high-level, and must NOT show intermediate reasoning.
-            - Do NOT output anything outside the <start> and <end> tokens for the final answer.
 
             ### Question
 
@@ -52,6 +47,9 @@ def get_prompt(entry, vanilla):
 
             Is the above code buggy or correct? Please explain your step by step reasoning. 
             The prediction should be enclosed within <start> and <end> tags. For example: <start>Buggy<end>
+
+            Run the following tests and if all tests pass, then the code is correct, otherwise it is buggy:
+            {entry['test']}
 
             ### Response:
             """
@@ -112,12 +110,14 @@ def prompt_model(dataset, model_name = "deepseek-ai/deepseek-coder-6.7b-instruct
         verdict = parse_response(response)
 
         print(f"Task_ID {entry['task_id']}:\nprompt:\n{prompt}\nresponse:\n{response}\nis_expected:\n{verdict}")
+        print("-----------------------------------------------------")
         results.append({
             "task_id": entry["task_id"],
             "prompt": prompt,
             "response": response,
             "is_correct": verdict
         })
+
         
 
     return results
