@@ -43,7 +43,7 @@ def get_prompt(entry, vanilla):
 
             ### Question
 
-            {entry['prompt'] + '\n' + entry['buggy_solution']}
+            {entry['declaration'] + '\n' + entry['buggy_solution']}
 
             Is the above code buggy or correct? Please explain your step by step reasoning. 
             The prediction should be enclosed within <start> and <end> tags. For example: <start>Buggy<end>
