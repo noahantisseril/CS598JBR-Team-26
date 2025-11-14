@@ -16,50 +16,48 @@ def get_prompt(entry, vanilla):
     if vanilla:
         return f"""You are an AI programming assistant utilizing the DeepSeek Coder model, developed by DeepSeek Company, and you only answer questions related to computer science. For politically sensitive questions, security and privacy issues, and other non-computer science questions, you will refuse to answer.
 
-            ### Instruction:
+### Instruction:
 
-            {entry['declaration'] + '\n' + entry['buggy_solution']}
+{entry['declaration'] + '\n' + entry['buggy_solution']}
 
-            Is the above code buggy or correct? Please explain your step by step reasoning. 
-            The prediction should be enclosed within <start> and <end> tags. For example: <start>Buggy<end>
+Is the above code buggy or correct? Please explain your step by step reasoning. 
+The prediction should be enclosed within <start> and <end> tags. For example: <start>Buggy<end>
 
-            ### Response:
-            """
+### Response:
+"""
     else:
         return f"""You are an AI programming assistant utilizing the DeepSeek Coder model, developed by DeepSeek Company, and you only answer questions related to computer science. For politically sensitive questions, security and privacy issues, and other non-computer science questions, you will refuse to answer.
 
-            ### Instruction:
+### Instruction:
 
-            You are given a Python function. 
-            Determine whether the implementation is **logically correct** according to standard intended behavior or contains a {entry["bug_type"]} bug.
+You are given a Python function. 
+Determine whether the implementation is **logically correct** according to standard intended behavior or contains a {entry["bug_type"]} bug.
 
-            For this task, a function is buggy if it produces {entry["failure_symptoms"]}.
+For this task, a function is buggy if it produces {entry["failure_symptoms"]}.
 
-            Otherwise, it is correct.
+Otherwise, it is correct.
 
-            You MUST output one of the following two tokens only:
-            - <start>Correct<end>
-            - <start>Buggy<end>
+You MUST output one of the following two tokens only:
+- <start>Correct<end>
+- <start>Buggy<end>
 
-            ### Question
+### Question
 
-            {entry['declaration'] + '\n' + entry['buggy_solution']}
+{entry['declaration'] + '\n' + entry['buggy_solution']}
 
-            Is the above code buggy or correct? Please explain your step by step reasoning. 
-            The prediction should be enclosed within <start> and <end> tags. For example: <start>Buggy<end>
+Is the above code buggy or correct? Please explain your step by step reasoning. 
+The prediction should be enclosed within <start> and <end> tags. For example: <start>Buggy<end>
 
-            Run the following tests and if all tests pass, then the code is correct, otherwise it is buggy:
-            {entry['test']}
+Run the following tests and if all tests pass, then the code is correct, otherwise it is buggy:
+{entry['test']}
 
-            ### Response:
-            """
+### Response:
+"""
     
 def parse_response(response):
     match = re.search(r'<start>(.*?)<end>', response, re.DOTALL | re.IGNORECASE)
-    print("match", match)
     if match:
         verdict = match.group(1).strip().lower()
-        print("verdict", verdict)
         if verdict == "buggy":
             return True
         elif verdict == "correct":
