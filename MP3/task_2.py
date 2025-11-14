@@ -12,13 +12,13 @@ def save_file(content, file_path):
     with open(file_path, 'w') as file:
         file.write(content)
 
-def get_prompt(code, vanilla):
+def get_prompt(entry, vanilla):
     if vanilla:
         return f"""You are an AI programming assistant utilizing the DeepSeek Coder model, developed by DeepSeek Company, and you only answer questions related to computer science. For politically sensitive questions, security and privacy issues, and other non-computer science questions, you will refuse to answer.
 
             ### Instruction:
 
-            {code}
+            {entry['declaration'] + '\n' + entry['buggy_solution']}
 
             Is the above code buggy or correct? Please explain your step by step reasoning. 
             The prediction should be enclosed within <start> and <end> tags. For example: <start>Buggy<end>
@@ -31,14 +31,9 @@ def get_prompt(code, vanilla):
             ### Instruction:
 
             You are given a Python function. 
-            Determine whether the implementation is **logically correct** according to standard intended behavior, unless a docstring states otherwise.
+            Determine whether the implementation is **logically correct** according to standard intended behavior or contains a {entry["bug_type"]} bug.
 
-            For this task, a function is **buggy** if ANY of the following are true:
-
-            - It contains incorrect logic.
-            - It incorrectly compares values (e.g., missing abs(), wrong inequality).
-            - It returns the wrong result for any input.
-            - It has mismatched behavior vs. typical expectations for the problem.
+            For this task, a function is buggy if it produces {entry["failure_symptoms"]}.
 
             Otherwise, it is **correct**.
 
@@ -53,7 +48,7 @@ def get_prompt(code, vanilla):
 
             ### Question
 
-            {code}
+            {entry['prompt'] + '\n' + entry['buggy_solution']}
 
             Is the above code buggy or correct? Please explain your step by step reasoning. 
             The prediction should be enclosed within <start> and <end> tags. For example: <start>Buggy<end>
@@ -94,11 +89,10 @@ def prompt_model(dataset, model_name = "deepseek-ai/deepseek-coder-6.7b-instruct
     
     results = []
     for entry in dataset:
-        code = entry['declaration'] + '\n' + entry['canonical_solution']
         # TODO: create prompt for the model
         # Tip : Use can use any data from the dataset to create 
         #       the prompt including prompt, canonical_solution, test, etc.
-        prompt = get_prompt(code, vanilla)
+        prompt = get_prompt(entry, vanilla)
         
         # TODO: prompt the model and get the response
         inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
