@@ -31,11 +31,9 @@ The prediction should be enclosed within <start> and <end> tags. For example: <s
 ### Instruction:
 
 You are given a Python function. 
-Determine whether the implementation is **logically correct** according to standard intended behavior or contains a {entry["bug_type"]} bug.
+Determine whether the implementation contains a bug, such as a {entry["bug_type"]}  bug.
 
-For this task, a function is buggy if it produces {entry["failure_symptoms"]}.
-
-Otherwise, it is correct.
+A buggy function may produce {entry["failure_symptoms"]}.
 
 You MUST output one of the following two tokens only:
 - <start>Correct<end>
