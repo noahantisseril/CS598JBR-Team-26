@@ -31,27 +31,33 @@ The prediction should be enclosed within <start> and <end> tags. For example: <s
 ### Instruction:
 
 You are given a Python function. 
-Determine whether the implementation contains a bug, such as a {entry["bug_type"]}  bug.
+Your task is to decide whether the function's implementation is logically correct or contains a bug.
 
-A buggy function may produce {entry["failure_symptoms"]}.
+A function is BUGGY if it produces: {entry["failure_symptoms"]}
+Bug type: {entry['bug_type']}
 
-You MUST output one of the following two tokens only:
-- <start>Correct<end>
-- <start>Buggy<end>
+Return ONLY one of the following:
+<start>Correct<end>
+<start>Buggy<end>
+
+Do NOT explain chain-of-thought.  
+Provide only a brief justification.
+
+Here is the function to evaluate:
 
 ### Question
 
 {entry['declaration'] + '\n' + entry['buggy_solution']}
 
-Is the above code buggy or correct? Please explain your step by step reasoning. 
+Is the above code buggy or correct?
 The prediction should be enclosed within <start> and <end> tags. For example: <start>Buggy<end>
-
-Run the following tests and if all tests pass, then the code is correct, otherwise it is buggy:
-{entry['test']}
 
 ### Response:
 """
     
+# Run the following tests and if all tests pass, then the code is correct, otherwise it is buggy:
+# {entry['test']}
+
 def parse_response(response):
     match = re.search(r'<start>(.*?)<end>', response, re.DOTALL | re.IGNORECASE)
     if match:
