@@ -12,51 +12,74 @@ def save_file(content, file_path):
     with open(file_path, 'w') as file:
         file.write(content)
 
+
 def get_prompt(entry, vanilla):
     if vanilla:
         return f"""You are an AI programming assistant utilizing the DeepSeek Coder model, developed by DeepSeek Company, and you only answer questions related to computer science. For politically sensitive questions, security and privacy issues, and other non-computer science questions, you will refuse to answer.
 
-### Instruction:
+    ### Instruction:
 
-{entry['declaration'] + '\n' + entry['buggy_solution']}
+    {entry['declaration'] + '\n' + entry['buggy_solution']}
 
-Is the above code buggy or correct? Please explain your step by step reasoning. 
-The prediction should be enclosed within <start> and <end> tags. For example: <start>Buggy<end>
+    Is the above code buggy or correct? Please explain your step by step reasoning. 
+    The prediction should be enclosed within <start> and <end> tags. For example: <start>Buggy<end>
 
-### Response:
-"""
+    ### Response:
+    """
     else:
         return f"""You are an AI programming assistant utilizing the DeepSeek Coder model, developed by DeepSeek Company, and you only answer questions related to computer science. For politically sensitive questions, security and privacy issues, and other non-computer science questions, you will refuse to answer.
 
-### Instruction:
+Decide whether the following Python function is logically correct or contains a bug. DO NOT CORRECT THE FUNCTION. If it needs a correction, then it is buggy.
 
-You are given a Python function. 
-Your task is to decide whether the function's implementation is logically correct or contains a bug.
+Mark it as:
+- Correct: if it returns the intended result for all valid inputs.
+- Buggy: if it can return a wrong result, miss an edge case, or raise an error for some valid input.
 
-A function is BUGGY if it produces: {entry["failure_symptoms"]}
-Bug type: {entry['bug_type']}
-
-Return ONLY one of the following:
-<start>Correct<end>
-<start>Buggy<end>
-
-Do NOT explain chain-of-thought.  
-Provide only a brief justification.
-
-Here is the function to evaluate:
-
-### Question
-
+Function:
 {entry['declaration'] + '\n' + entry['buggy_solution']}
 
-Is the above code buggy or correct?
-The prediction should be enclosed within <start> and <end> tags. For example: <start>Buggy<end>
+Example tests (describe intended behavior):
+{entry['test']}
+
+Your answer MUST contain one of the following two lines:
+<start>Correct<end>
+<start>Buggy<end>
 
 ### Response:
 """
     
 # Run the following tests and if all tests pass, then the code is correct, otherwise it is buggy:
 # {entry['test']}
+
+def process_response(response):
+    to_consider = False
+    for line in response.split("\n"):
+        line = line.strip()
+        if line.startswith("<start>"):
+            if line.endswith("<end>"):
+                return parse_response(line)
+            elif len(line) != 7:
+                line = line[7:]
+                if (line.lower() == "buggy"):
+                    return True
+                elif (line.lower() == "correct"):
+                    return False
+                else:
+                    continue
+            to_consider = True
+        elif line.startswith("<end>"):
+            return False
+        elif to_consider:
+            if (line.lower() == "buggy"):
+                return True
+            elif (line.lower() == "correct"):
+                return False
+            else:
+                continue
+        else:
+            continue
+            
+    return False
 
 def parse_response(response):
     match = re.search(r'<start>(.*?)<end>', response, re.DOTALL | re.IGNORECASE)
@@ -109,7 +132,7 @@ def prompt_model(dataset, model_name = "deepseek-ai/deepseek-coder-6.7b-instruct
         response = tokenizer.decode(outputs[0][inputs['input_ids'].shape[1]:], skip_special_tokens=True)
 
         # TODO: process the response and save it to results
-        verdict = parse_response(response)
+        verdict = process_response(response)
 
         print(f"Task_ID {entry['task_id']}:\nprompt:\n{prompt}\nresponse:\n{response}\nis_expected:\n{verdict}")
         print("-----------------------------------------------------")
