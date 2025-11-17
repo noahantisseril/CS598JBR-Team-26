@@ -31,15 +31,18 @@ def get_prompt(entry, vanilla):
 
 Decide whether the following Python function is logically correct or contains a bug. DO NOT CORRECT THE FUNCTION. If it needs a correction, then it is buggy.
 
+Common bugs include:
+- Missing or Excessive logic
+- Incorrect operators
+- Incorrect variable usage
+- Incorrect value usage
+
 Mark it as:
 - Correct: if it returns the intended result for all valid inputs.
 - Buggy: if it can return a wrong result, miss an edge case, or raise an error for some valid input.
 
 Function:
 {entry['declaration'] + '\n' + entry['buggy_solution']}
-
-Example tests (describe intended behavior):
-{entry['test']}
 
 Your answer MUST contain one of the following two lines:
 <start>Correct<end>
