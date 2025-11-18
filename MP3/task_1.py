@@ -80,6 +80,7 @@ def execute_java(java_test_code, java_impl_code, declaration):
         timeout=60,
     )
     if compile_proc.returncode != 0:
+        print("compilation error")
         return False
 
     run_proc = subprocess.run(
