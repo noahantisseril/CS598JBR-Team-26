@@ -170,13 +170,13 @@ def locate_search(instance_id):
     return results
 
 
-def locate_tool_use(instance_id):
-    # Parse instance ID
+def locate_tool_use(instance_id: str) -> Dict[str, int]:
+    # get instance ID
     agent_name, problem_name = instance_id.split("@")
     instance_dir = ROOT / instance_id
     traj_file = instance_dir / f"{problem_name}.traj"
     
-    # load trajectory
+    # get trajectory
     steps = load_trajectory_file(traj_file)
     if not steps:
         return {}
@@ -188,7 +188,6 @@ def locate_tool_use(instance_id):
         query = step.get("query", None)
 
         messages = step.get("messages", None)
-        possible_tools = ["view", "create", "str_replace", "insert", "undo_edit"]
         # models have diff format
         iterable_convo = None
         if query:
@@ -196,15 +195,13 @@ def locate_tool_use(instance_id):
         elif messages:
             iterable_convo = messages
         for info in iterable_convo:
-            tool_calls_list = info.get("tool_calls", None)
+            tool_calls_list = info["tool_calls"] if "tool_calls" in info else None
             if not tool_calls_list:
                 continue
             for tool_call_dict in tool_calls_list:
                 if not tool_call_dict:
                     continue
-                for tool in possible_tools:
-                    if tool in tool_call_dict["function"]["arguments"]:
-                        tool_counts[tool] = tool_counts.get(tool, 0) + 1
+                tool_counts[tool_call_dict["function"]["name"]] = tool_counts.get(tool_call_dict["function"]["name"], 0) + 1
     return tool_counts
 
 def main():
