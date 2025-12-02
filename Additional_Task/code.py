@@ -66,11 +66,14 @@ def locate_search(instance_id):
 def locate_tool_use(instance_id):
     steps = load_trajectory_file(instance_id)
     tool_counts = {}
-    
+
     for step in steps:
         query = step.get("query", None)
 
         messages = step.get("messages", None)
+        possible_args = ["view", "create", "str_replace", "insert", "undo_edit"]
+        bash_args = ["find", "grep", "cat", "ls", "cd"]
+        possible_args.extend(bash_args)
         # models have diff format
         iterable_convo = None
         if query:
@@ -78,13 +81,15 @@ def locate_tool_use(instance_id):
         elif messages:
             iterable_convo = messages
         for info in iterable_convo:
-            tool_calls_list = info["tool_calls"] if "tool_calls" in info else None
+            tool_calls_list = info.get("tool_calls", None)
             if not tool_calls_list:
                 continue
             for tool_call_dict in tool_calls_list:
                 if not tool_call_dict:
                     continue
-                tool_counts[tool_call_dict["function"]["name"]] = tool_counts.get(tool_call_dict["function"]["name"], 0) + 1
+                for tool in possible_args:
+                    if tool in tool_call_dict["function"]["arguments"]:
+                        tool_counts[tool] = tool_counts.get(tool, 0) + 1
     return tool_counts
 
 def main():
