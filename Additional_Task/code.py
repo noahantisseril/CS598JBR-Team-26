@@ -65,6 +65,10 @@ def locate_search(instance_id):
 
 def locate_tool_use(instance_id):
     steps = load_trajectory_file(instance_id)
+    if not steps:
+        return {}
+
+    # count tool usage
     tool_counts = {}
 
     for step in steps:
@@ -87,9 +91,15 @@ def locate_tool_use(instance_id):
             for tool_call_dict in tool_calls_list:
                 if not tool_call_dict:
                     continue
-                for tool in possible_args:
-                    if tool in tool_call_dict["function"]["arguments"]:
-                        tool_counts[tool] = tool_counts.get(tool, 0) + 1
+                tool_name = tool_call_dict["function"]["name"]
+                # if no found arguments, just put the tool name
+                if tool_call_dict["function"]["arguments"] == "{}":
+                    tool_counts[tool_name] = tool_counts.get(tool_name, 0) + 1
+                else:
+                    # otherwise put in the args
+                    for tool in possible_args:
+                        if tool in tool_call_dict["function"]["arguments"]:
+                            tool_counts[tool] = tool_counts.get(tool, 0) + 1
     return tool_counts
 
 def main():
