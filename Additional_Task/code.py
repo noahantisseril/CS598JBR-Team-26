@@ -171,16 +171,6 @@ def locate_search(instance_id):
 
 
 def locate_tool_use(instance_id: str) -> Dict[str, int]:
-    """
-    Extract tool usage statistics from a trajectory.
-    
-    Args:
-        instance_id: Format "agent_name@problem_name"
-        
-    Returns:
-        Dictionary mapping tool names to usage counts
-        Example: {"view": 9, "create": 3, "str_replace": 2}
-    """
     # Parse instance ID
     agent_name, problem_name = instance_id.split("@")
     instance_dir = ROOT / instance_id
