@@ -7,28 +7,18 @@ from typing import List
 
 ROOT = Path("extracted_trajectories")
 
-# keywords that indicate reproduction creation
-REPRO_KEYWORDS = ["repro", "reproduce", "reproduction", "debug", "debugging"]
-
 def load_trajectory_file(traj_path):
-    if not traj_path.exists():
-        return None
-
     text = traj_path.read_text(encoding="utf-8", errors="ignore").strip()
-    if not text:
-        return None
-
     obj = json.loads(text)
-    if isinstance(obj, dict) and "trajectory" in obj and isinstance(obj["trajectory"], list):
-        return obj["trajectory"]
+    return obj["trajectory"]
 
-    return None
+reproduction_keywords = ["repro", "reproduce", "reproduction", "debug", "debugging"]
 
-def text_contains_keywords(text, keywords=REPRO_KEYWORDS):
+def contains_words_in_list(text):
     t = (text or "").lower()
-    return any(k in t for k in keywords)
+    return any(k in t for k in reproduction_keywords)
     
-def extract_created_filename(action):
+def extract_filename(action):
     pattern = r"create\s+([^\s]+)\s+--file_text"
     match = re.search(pattern, action)
 
@@ -39,35 +29,22 @@ def extract_created_filename(action):
 def locate_reproduction_code(instance_id):
     agent_name, problem_name = instance_id.split("@")
     instance_dir = ROOT / instance_id
-    # if not instance_dir.exists():
-    #     print(f"[WARN] instance dir not found: {instance_dir}")
-    #     return []
-    
     traj_file = instance_dir / f"{problem_name}.traj"
     traj_steps = load_trajectory_file(traj_file)
-        
-    if traj_steps is None:
-        print(f"[WARN] No trajectory file parsed for {instance_id}")
-        return []
-
     reproduction_steps = []
     for idx, step in enumerate(traj_steps):
-        # make safe string copies
-        thought = (step.get("thought") or "") if isinstance(step.get("thought"), str) else ""
-        # observation = (step.get("observation") or "") if isinstance(step.get("observation"), str) else ""
-        action = step.get("action")  # may be str or dict
-        # state = step.get("state") or {}
+        thought = step["thought"]
+        action = step["action"]
 
         action_create_flag = "create" in str(action).lower()
-        filename = extract_created_filename(action) if isinstance(action, str) else None
+        filename = extract_filename(action)
         if action_create_flag and filename:
-            # print("filename:", filename)
-            if text_contains_keywords(filename) or text_contains_keywords(thought):
-                # print("found repro filename in step", filename)
+            if contains_words_in_list(filename) or contains_words_in_list(thought):
                 reproduction_steps.append(idx)
 
     return reproduction_steps
 
+    
 ACTION_PATTERNS = [
     # explicit SWE-Agent commands
     r"\bfind_file\b", r"\bsearch_file\b", r"\bsearch_dir\b",
