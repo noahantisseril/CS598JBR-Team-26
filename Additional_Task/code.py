@@ -73,7 +73,7 @@ def locate_search(instance_id):
     return results
 
 def locate_tool_use(instance_id):
-    traj_steps = load_trajectory_file(instance_id)
+    steps = load_trajectory_file(instance_id)
     tool_counts = {}
 
     for step in steps:
@@ -89,7 +89,6 @@ def locate_tool_use(instance_id):
             iterable_convo = query
         elif messages:
             iterable_convo = messages
-    for step in traj_steps:
         for info in iterable_convo:
             tool_calls_list = info.get("tool_calls", None)
             if not tool_calls_list:
