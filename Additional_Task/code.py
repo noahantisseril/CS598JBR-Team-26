@@ -170,7 +170,7 @@ def locate_search(instance_id):
     return results
 
 
-def locate_tool_use(instance_id: str) -> Dict[str, int]:
+def locate_tool_use(instance_id):
     # Parse instance ID
     agent_name, problem_name = instance_id.split("@")
     instance_dir = ROOT / instance_id
@@ -196,7 +196,7 @@ def locate_tool_use(instance_id: str) -> Dict[str, int]:
         elif messages:
             iterable_convo = messages
         for info in iterable_convo:
-            tool_calls_list = info["tool_calls"] if "tool_calls" in info else None
+            tool_calls_list = info.get("tool_calls", None)
             if not tool_calls_list:
                 continue
             for tool_call_dict in tool_calls_list:
