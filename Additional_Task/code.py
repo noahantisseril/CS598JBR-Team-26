@@ -10,7 +10,7 @@ def load_trajectory_file(instance_id):
     agent_name, problem_name = instance_id.split("@")
     instance_dir = ROOT / instance_id
     traj_file = instance_dir / f"{problem_name}.traj"
-    text = traj_path.read_text(encoding="utf-8", errors="ignore").strip()
+    text = traj_file.read_text(encoding="utf-8", errors="ignore").strip()
     obj = json.loads(text)
     return obj["trajectory"]
 
