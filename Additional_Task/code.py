@@ -169,6 +169,54 @@ def locate_search(instance_id):
 
     return results
 
+
+def locate_tool_use(instance_id: str) -> Dict[str, int]:
+    """
+    Extract tool usage statistics from a trajectory.
+    
+    Args:
+        instance_id: Format "agent_name@problem_name"
+        
+    Returns:
+        Dictionary mapping tool names to usage counts
+        Example: {"view": 9, "create": 3, "str_replace": 2}
+    """
+    # Parse instance ID
+    agent_name, problem_name = instance_id.split("@")
+    instance_dir = ROOT / instance_id
+    traj_file = instance_dir / f"{problem_name}.traj"
+    
+    # load trajectory
+    steps = load_trajectory_file(traj_file)
+    if not steps:
+        return {}
+    
+    # count tool usage
+    tool_counts = {}
+    
+    for step in steps:
+        query = step.get("query", None)
+
+        messages = step.get("messages", None)
+        possible_tools = ["view", "create", "str_replace", "insert", "undo_edit"]
+        # models have diff format
+        iterable_convo = None
+        if query:
+            iterable_convo = query
+        elif messages:
+            iterable_convo = messages
+        for info in iterable_convo:
+            tool_calls_list = info["tool_calls"] if "tool_calls" in info else None
+            if not tool_calls_list:
+                continue
+            for tool_call_dict in tool_calls_list:
+                if not tool_call_dict:
+                    continue
+                for tool in possible_tools:
+                    if tool in tool_call_dict["function"]["arguments"]:
+                        tool_counts[tool] = tool_counts.get(tool, 0) + 1
+    return tool_counts
+
 def main():
     if not ROOT.exists():
         print(f"[ERROR] Root extracted directory not found: {ROOT}")
