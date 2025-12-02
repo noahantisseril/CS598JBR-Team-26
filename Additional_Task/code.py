@@ -6,12 +6,15 @@ from typing import List
 
 ROOT = Path("extracted_trajectories")
 
-def load_trajectory_file(traj_path):
+def load_trajectory_file(instance_id):
+    agent_name, problem_name = instance_id.split("@")
+    instance_dir = ROOT / instance_id
+    traj_file = instance_dir / f"{problem_name}.traj"
     text = traj_path.read_text(encoding="utf-8", errors="ignore").strip()
     obj = json.loads(text)
     return obj["trajectory"]
 
-reproduction_keywords = ["repro", "reproduce", "reproduction", "debug", "debugging"]
+reproduction_keywords = ["reproduce", "reproduction", "debug", "debugging"]
 
 def contains_words_in_list(text):
     t = (text or "").lower()
@@ -26,10 +29,7 @@ def extract_filename(action):
     return None
 
 def locate_reproduction_code(instance_id):
-    agent_name, problem_name = instance_id.split("@")
-    instance_dir = ROOT / instance_id
-    traj_file = instance_dir / f"{problem_name}.traj"
-    traj_steps = load_trajectory_file(traj_file)
+    traj_steps = load_trajectory_file(instance_id)
     reproduction_steps = []
     for idx, step in enumerate(traj_steps):
         thought = step["thought"]
@@ -44,50 +44,27 @@ def locate_reproduction_code(instance_id):
     return reproduction_steps
 
     
-ACTION_PATTERNS = [
-    r"\bfind\b", r"\bgrep\b", r"\bls\b", r"\bcd\b", r"\bcat\b",
+search_keywords = [
+    "find", "grep", "ls", "cd", "cat",
 ]
 
-ACTION_RE = re.compile("|".join(ACTION_PATTERNS), re.IGNORECASE)
-
-def step_contains_search(step):
-    if not isinstance(step, dict):
-        return False
-            
-    action_val = step.get("action").lower()
-
-    if not action_val.strip():
-        return False
-
-    return isinstance(action_val, str) and ACTION_RE.search(action_val)
-
 def locate_search(instance_id):
-    agent_name, problem_name = instance_id.split("@")
-    instance_dir = ROOT / instance_id
-    traj_file = instance_dir / f"{problem_name}.traj"
-    traj_steps = load_trajectory_file(traj_file)
+    traj_steps = load_trajectory_file(instance_id)
 
     results = []
 
     for idx, step in enumerate(traj_steps):
-        if step_contains_search(step):
+        action_val = step.get("action").lower()
+        action_val = action_val.strip()
+
+        if any(k in action_val for k in search_keywords):
             results.append(idx)
 
     return results
 
 
-def locate_tool_use(instance_id: str):
-    # get instance ID
-    agent_name, problem_name = instance_id.split("@")
-    instance_dir = ROOT / instance_id
-    traj_file = instance_dir / f"{problem_name}.traj"
-    
-    # get trajectory
-    steps = load_trajectory_file(traj_file)
-    if not steps:
-        return {}
-    
-    # count tool usage
+def locate_tool_use(instance_id):
+    steps = load_trajectory_file(instance_id)
     tool_counts = {}
     
     for step in steps:
