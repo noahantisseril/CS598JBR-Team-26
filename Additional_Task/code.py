@@ -45,7 +45,7 @@ def locate_reproduction_code(instance_id):
 
     
 search_keywords = [
-    "find", "grep", "ls", "cd", "cat",
+    "find", "grep", "ls", "cd", "cat", "str_replace_editor view", 
 ]
 
 def locate_search(instance_id):
@@ -54,29 +54,28 @@ def locate_search(instance_id):
     results = []
 
     for idx, step in enumerate(traj_steps):
-        action_val = step.get("action").lower()
-        action_val = action_val.strip()
-
-        if any(k in action_val for k in search_keywords):
-            results.append(idx)
+        action_vals = step["action"].lower().strip().split(" ")
+        use_multi = False
+        for action_val in action_vals:
+            if action_val == "str_replace_editor":
+                use_multi = True
+                continue
+            if use_multi and action_val == "view":
+                results.append(idx)
+                break
+            else:
+                use_multi = False
+                
+            if any(k == action_val for k in search_keywords):
+                results.append(idx)
+                break
 
     return results
 
-
 def locate_tool_use(instance_id):
-    steps = load_trajectory_file(instance_id)
+    traj_steps = load_trajectory_file(instance_id)
     tool_counts = {}
-    
-    for step in steps:
-        query = step.get("query", None)
-
-        messages = step.get("messages", None)
-        # models have diff format
-        iterable_convo = None
-        if query:
-            iterable_convo = query
-        elif messages:
-            iterable_convo = messages
+    for step in traj_steps:
         for info in iterable_convo:
             tool_calls_list = info["tool_calls"] if "tool_calls" in info else None
             if not tool_calls_list:
@@ -94,18 +93,18 @@ def main():
     for instance in instance_dirs:
         steps = locate_reproduction_code(instance)
         reproduction_lines.append(f"{instance}: {steps}")
-        print(f"{instance}: {steps}")
 
-    with open("locate_reproduction_code.log", "w", encoding="utf-8") as fh:
-        fh.write("\n".join(reproduction_lines))
+    with open("locate_reproduction_code.log", "w", encoding="utf-8") as f:
+        f.write("\n".join(reproduction_lines))
 
-    
+
     search_lines = []
     for instance in instance_dirs:
         steps = locate_search(instance)
         search_lines.append(f"{instance}: {steps}")
-    with open("locate_search.log", "w", encoding="utf-8") as fh:
-        fh.write("\n".join(search_lines))
+
+    with open("locate_search.log", "w", encoding="utf-8") as f:
+        f.write("\n".join(search_lines))
 
 if __name__ == "__main__":
     main()
