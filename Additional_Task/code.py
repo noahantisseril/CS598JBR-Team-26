@@ -74,37 +74,22 @@ def locate_search(instance_id):
 
 def locate_tool_use(instance_id):
     steps = load_trajectory_file(instance_id)
+    if not steps:
+        return {}
+
+    # count tool usage
     tool_counts = {}
 
     for step in steps:
-        query = step.get("query", None)
-
-        messages = step.get("messages", None)
-        possible_args = ["view", "create", "str_replace", "insert", "undo_edit"]
+        action = step.get("action", None)
+        possible_args = ["view", "create", "str_replace", "insert", "undo_edit", "submit"]
         bash_args = ["find", "grep", "cat", "ls", "cd"]
         possible_args.extend(bash_args)
-        # models have diff format
-        iterable_convo = None
-        if query:
-            iterable_convo = query
-        elif messages:
-            iterable_convo = messages
-        for info in iterable_convo:
-            tool_calls_list = info.get("tool_calls", None)
-            if not tool_calls_list:
-                continue
-            for tool_call_dict in tool_calls_list:
-                if not tool_call_dict:
-                    continue
-                tool_name = tool_call_dict["function"]["name"]
-                # if no found arguments, just put the tool name
-                if tool_call_dict["function"]["arguments"] == "{}":
-                    tool_counts[tool_name] = tool_counts.get(tool_name, 0) + 1
-                else:
-                    # otherwise put in the args
-                    for tool in possible_args:
-                        if tool in tool_call_dict["function"]["arguments"]:
-                            tool_counts[tool] = tool_counts.get(tool, 0) + 1
+
+        for arg in possible_args:
+            if arg in action:
+                tool_counts[arg] = tool_counts.get(arg, 0) + 1
+
     return tool_counts
 
 def main():
@@ -126,6 +111,15 @@ def main():
 
     with open("locate_search.log", "w", encoding="utf-8") as f:
         f.write("\n".join(search_lines))
+
+    tool_lines = []
+    for instance in instance_dirs:
+        instance_dict = {"instance" : instance}
+        steps = locate_tool_use(instance)
+        instance_dict.update(steps)
+        tool_lines.append(instance_dict)
+    with open("locate_tool_use.log", "w", encoding="utf-8") as fh:
+        json.dump(tool_lines, fh, indent=2)
 
 if __name__ == "__main__":
     main()
