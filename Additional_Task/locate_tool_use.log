@@ -5,6 +5,7 @@
     "view": 25,
     "create": 1,
     "cd": 5,
+    "python": 5,
     "str_replace": 4,
     "submit": 1
   },
@@ -14,6 +15,7 @@
     "view": 11,
     "create": 2,
     "cd": 7,
+    "python": 7,
     "str_replace": 8,
     "submit": 1
   },
@@ -21,32 +23,42 @@
     "view": 21,
     "str_replace": 29,
     "create": 1,
+    "python": 24,
     "find": 2
   },
   "20250522_sweagent_claude-4-sonnet-20250514@astropy__astropy-13033": {
     "view": 11,
     "create": 10,
     "cd": 47,
+    "python": 18,
     "str_replace": 4,
     "grep": 1,
-    "submit": 2
+    "submit": 2,
+    "rm": 2,
+    "git": 21
   },
   "20250522_sweagent_claude-4-sonnet-20250514@astropy__astropy-14182": {
     "view": 12,
     "grep": 13,
     "create": 10,
     "cd": 73,
+    "python": 15,
     "str_replace": 3,
-    "submit": 2
+    "submit": 2,
+    "rm": 2,
+    "git": 36
   },
   "20250522_sweagent_claude-4-sonnet-20250514@astropy__astropy-7606": {
     "view": 8,
     "cd": 30,
     "grep": 10,
     "create": 7,
+    "python": 10,
     "str_replace": 1,
     "submit": 2,
-    "ls": 1
+    "rm": 2,
+    "ls": 1,
+    "git": 1
   },
   "20250522_sweagent_claude-4-sonnet-20250514@django__django-11477": {
     "view": 19,
@@ -54,16 +66,22 @@
     "grep": 11,
     "create": 6,
     "cd": 43,
+    "python": 19,
     "str_replace": 7,
-    "submit": 2
+    "git": 20,
+    "submit": 2,
+    "rm": 2
   },
   "20250522_sweagent_claude-4-sonnet-20250514@django__django-12325": {
     "view": 16,
     "create": 7,
     "cd": 32,
+    "python": 22,
     "grep": 5,
     "str_replace": 12,
-    "submit": 2
+    "submit": 2,
+    "rm": 2,
+    "git": 1
   },
   "20250522_sweagent_claude-4-sonnet-20250514@django__django-14122": {
     "view": 39,
@@ -71,6 +89,7 @@
     "grep": 19,
     "create": 10,
     "cd": 26,
+    "python": 24,
     "str_replace": 22
   },
   "20250522_sweagent_claude-4-sonnet-20250514@django__django-14155": {
@@ -79,14 +98,17 @@
     "view": 8,
     "create": 8,
     "cd": 25,
+    "python": 21,
     "str_replace": 5,
-    "submit": 2
+    "submit": 2,
+    "rm": 1
   },
   "20250522_sweagent_claude-4-sonnet-20250514@django__django-15098": {
     "view": 27,
     "grep": 26,
     "create": 10,
     "cd": 39,
+    "python": 20,
     "find": 5,
     "str_replace": 9
   },
@@ -95,8 +117,10 @@
     "grep": 4,
     "create": 7,
     "cd": 25,
+    "python": 21,
     "str_replace": 10,
-    "submit": 2
+    "submit": 2,
+    "rm": 2
   },
   "20250522_sweagent_claude-4-sonnet-20250514@matplotlib__matplotlib-22871": {
     "find": 1,
@@ -104,68 +128,85 @@
     "view": 9,
     "create": 9,
     "cd": 20,
+    "python": 12,
     "str_replace": 2,
-    "submit": 2
+    "submit": 2,
+    "rm": 2
   },
   "20250522_sweagent_claude-4-sonnet-20250514@matplotlib__matplotlib-24149": {
     "view": 17,
     "create": 6,
     "cd": 32,
+    "python": 13,
     "grep": 11,
     "str_replace": 4,
-    "submit": 2
+    "submit": 2,
+    "rm": 1
   },
   "20250522_sweagent_claude-4-sonnet-20250514@matplotlib__matplotlib-25287": {
     "view": 7,
     "cd": 32,
     "grep": 12,
     "create": 11,
+    "python": 13,
     "str_replace": 3,
     "find": 1,
-    "submit": 2
+    "submit": 2,
+    "rm": 2
   },
   "20250522_sweagent_claude-4-sonnet-20250514@psf__requests-5414": {
     "view": 20,
     "create": 12,
     "cd": 37,
+    "python": 17,
     "grep": 14,
     "find": 1,
     "str_replace": 4,
-    "submit": 2
+    "submit": 2,
+    "rm": 1
   },
   "20250522_sweagent_claude-4-sonnet-20250514@sphinx-doc__sphinx-10435": {
     "view": 8,
     "cd": 27,
     "grep": 2,
     "create": 13,
+    "python": 17,
     "str_replace": 3,
     "find": 1,
-    "submit": 2
+    "rm": 2,
+    "submit": 2,
+    "git": 1
   },
   "20250522_sweagent_claude-4-sonnet-20250514@sympy__sympy-12489": {
     "view": 26,
     "grep": 14,
     "create": 4,
     "cd": 29,
+    "python": 11,
     "str_replace": 45,
-    "submit": 2
+    "submit": 2,
+    "rm": 1
   },
   "20250522_sweagent_claude-4-sonnet-20250514@sympy__sympy-18199": {
     "view": 12,
     "grep": 8,
     "create": 12,
     "cd": 26,
+    "python": 16,
     "str_replace": 2,
     "find": 1,
-    "submit": 2
+    "submit": 2,
+    "rm": 1
   },
   "20250522_sweagent_claude-4-sonnet-20250514@sympy__sympy-19040": {
     "view": 20,
     "create": 11,
     "cd": 43,
+    "python": 20,
     "find": 3,
     "grep": 13,
     "str_replace": 8,
-    "submit": 2
+    "submit": 2,
+    "rm": 2
   }
 }
