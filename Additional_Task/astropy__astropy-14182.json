@@ -1,0 +1,23 @@
+{
+  "Traj ID": "astropy__astropy-14182",
+  "Issue Summary": "",
+  "Interaction Summary": "",
+  "Reproduction Code": "",
+  "1.1": "YES",
+  "1.2": "",
+  "Search for the issue": "",
+  "2.1": "YES",
+  "2.2": "",
+  "Edit the Code": "",
+  "Test changes on the reproduction code": "",
+  "4.1": "",
+  "4.2": "",
+  "Tool-use analysis": {
+    "view": 12,
+    "grep": 13,
+    "create": 10,
+    "cd": 73,
+    "str_replace": 3,
+    "submit": 2
+  }
+}

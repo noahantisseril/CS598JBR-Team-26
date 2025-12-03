@@ -1,0 +1,24 @@
+{
+  "Traj ID": "sympy__sympy-18199",
+  "Issue Summary": "",
+  "Interaction Summary": "",
+  "Reproduction Code": "",
+  "1.1": "YES",
+  "1.2": "",
+  "Search for the issue": "",
+  "2.1": "YES",
+  "2.2": "",
+  "Edit the Code": "",
+  "Test changes on the reproduction code": "",
+  "4.1": "",
+  "4.2": "",
+  "Tool-use analysis": {
+    "view": 12,
+    "grep": 8,
+    "create": 12,
+    "cd": 26,
+    "str_replace": 2,
+    "find": 1,
+    "submit": 2
+  }
+}

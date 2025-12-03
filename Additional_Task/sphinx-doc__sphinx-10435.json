@@ -1,0 +1,24 @@
+{
+  "Traj ID": "sphinx-doc__sphinx-10435",
+  "Issue Summary": "",
+  "Interaction Summary": "",
+  "Reproduction Code": "",
+  "1.1": "YES",
+  "1.2": "",
+  "Search for the issue": "",
+  "2.1": "YES",
+  "2.2": "",
+  "Edit the Code": "",
+  "Test changes on the reproduction code": "",
+  "4.1": "",
+  "4.2": "",
+  "Tool-use analysis": {
+    "view": 8,
+    "cd": 27,
+    "grep": 2,
+    "create": 13,
+    "str_replace": 3,
+    "find": 1,
+    "submit": 2
+  }
+}

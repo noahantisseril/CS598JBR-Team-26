@@ -1,0 +1,24 @@
+{
+  "Traj ID": "django__django-12774",
+  "Issue Summary": "",
+  "Interaction Summary": "",
+  "Reproduction Code": "",
+  "1.1": "YES",
+  "1.2": "",
+  "Search for the issue": "",
+  "2.1": "YES",
+  "2.2": "",
+  "Edit the Code": "",
+  "Test changes on the reproduction code": "",
+  "4.1": "",
+  "4.2": "",
+  "Tool-use analysis": {
+    "find": 2,
+    "grep": 5,
+    "view": 11,
+    "create": 2,
+    "cd": 7,
+    "str_replace": 8,
+    "submit": 1
+  }
+}

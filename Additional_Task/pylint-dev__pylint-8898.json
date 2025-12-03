@@ -1,0 +1,21 @@
+{
+  "Traj ID": "pylint-dev__pylint-8898",
+  "Issue Summary": "",
+  "Interaction Summary": "",
+  "Reproduction Code": "",
+  "1.1": "YES",
+  "1.2": "",
+  "Search for the issue": "",
+  "2.1": "YES",
+  "2.2": "",
+  "Edit the Code": "",
+  "Test changes on the reproduction code": "",
+  "4.1": "",
+  "4.2": "",
+  "Tool-use analysis": {
+    "view": 21,
+    "str_replace": 29,
+    "create": 1,
+    "find": 2
+  }
+}
