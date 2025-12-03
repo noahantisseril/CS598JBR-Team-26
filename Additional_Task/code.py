@@ -14,7 +14,7 @@ def load_trajectory_file(instance_id):
     obj = json.loads(text)
     return obj["trajectory"]
 
-reproduction_keywords = ["reproduce", "reproduction", "debug", "debugging"]
+reproduction_keywords = ["reproduce", "reproduction", "debug", "debugging", "verify", "test"]
 
 def contains_words_in_list(text):
     t = (text or "").lower()
@@ -35,7 +35,7 @@ def locate_reproduction_code(instance_id):
         thought = step["thought"]
         action = step["action"]
 
-        action_create_flag = "create" in str(action).lower()
+        action_create_flag = "str_replace_editor create" in str(action).lower()
         filename = extract_filename(action)
         if action_create_flag and filename:
             if contains_words_in_list(filename) or contains_words_in_list(thought):
@@ -54,7 +54,7 @@ def locate_search(instance_id):
     results = []
 
     for idx, step in enumerate(traj_steps):
-        action_vals = step["action"].lower().strip().split(" ")
+        action_vals = step["action"].split()
         use_multi = False
         for action_val in action_vals:
             if action_val == "str_replace_editor":
@@ -71,12 +71,10 @@ def locate_search(instance_id):
                 break
 
     return results
+
 def locate_tool_use(instance_id):
     steps = load_trajectory_file(instance_id)
-    if not steps:
-        return {}
 
-    # count tool usage
     tool_counts = {}
     for step in steps:
         action = step.get("action", None).split()
@@ -89,9 +87,11 @@ def locate_tool_use(instance_id):
                 continue
             if use_multi and word in possible_args:
                 tool_counts[word] = tool_counts.get(word, 0) + 1
+
             if word in bash_args + ["submit"]:
                 tool_counts[word] = tool_counts.get(word, 0) + 1
             use_multi = False
+
     return tool_counts
 
 def main():
