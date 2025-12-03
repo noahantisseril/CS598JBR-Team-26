@@ -54,7 +54,7 @@ def locate_search(instance_id):
     results = []
 
     for idx, step in enumerate(traj_steps):
-        action_vals = step["action"].lower().strip().split(" ")
+        action_vals = step["action"].split()
         use_multi = False
         for action_val in action_vals:
             if action_val == "str_replace_editor":
@@ -71,12 +71,10 @@ def locate_search(instance_id):
                 break
 
     return results
+
 def locate_tool_use(instance_id):
     steps = load_trajectory_file(instance_id)
-    if not steps:
-        return {}
 
-    # count tool usage
     tool_counts = {}
     for step in steps:
         action = step.get("action", None).split()
@@ -89,9 +87,11 @@ def locate_tool_use(instance_id):
                 continue
             if use_multi and word in possible_args:
                 tool_counts[word] = tool_counts.get(word, 0) + 1
+
             if word in bash_args + ["submit"]:
                 tool_counts[word] = tool_counts.get(word, 0) + 1
             use_multi = False
+            
     return tool_counts
 
 def main():
@@ -120,7 +120,8 @@ def main():
         steps = locate_tool_use(instance)
         instance_dict.update(steps)
         tool_lines.append(instance_dict)
-    with open("locate_tool_use.log", "w", encoding="utf-8") as fh:
+        
+    with open("locate_tool_use.log", "w", encoding="utf-8") as f:
         json.dump(tool_lines, fh, indent=2)
 
 if __name__ == "__main__":
