@@ -71,7 +71,6 @@ def locate_search(instance_id):
                 break
 
     return results
-
 def locate_tool_use(instance_id):
     steps = load_trajectory_file(instance_id)
     if not steps:
@@ -79,17 +78,20 @@ def locate_tool_use(instance_id):
 
     # count tool usage
     tool_counts = {}
-
     for step in steps:
-        action = step.get("action", None)
-        possible_args = ["view", "create", "str_replace", "insert", "undo_edit", "submit"]
+        action = step.get("action", None).split()
+        possible_args = ["view", "create", "str_replace", "insert", "undo_edit"]
         bash_args = ["find", "grep", "cat", "ls", "cd"]
-        possible_args.extend(bash_args)
-
-        for arg in possible_args:
-            if arg in action:
-                tool_counts[arg] = tool_counts.get(arg, 0) + 1
-
+        use_multi = False
+        for word in action:
+            if word == "str_replace_editor":
+                use_multi = True
+                continue
+            if use_multi and word in possible_args:
+                tool_counts[word] = tool_counts.get(word, 0) + 1
+            if word in bash_args + ["submit"]:
+                tool_counts[word] = tool_counts.get(word, 0) + 1
+            use_multi = False
     return tool_counts
 
 def main():
