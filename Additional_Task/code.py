@@ -91,7 +91,7 @@ def locate_tool_use(instance_id):
             if word in bash_args + ["submit"]:
                 tool_counts[word] = tool_counts.get(word, 0) + 1
             use_multi = False
-            
+
     return tool_counts
 
 def main():
@@ -122,7 +122,7 @@ def main():
         tool_lines.append(instance_dict)
         
     with open("locate_tool_use.log", "w", encoding="utf-8") as f:
-        json.dump(tool_lines, fh, indent=2)
+        json.dump(tool_lines, f, indent=2)
 
 if __name__ == "__main__":
     main()
