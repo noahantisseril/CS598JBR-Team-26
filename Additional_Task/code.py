@@ -114,14 +114,11 @@ def main():
     with open("locate_search.log", "w", encoding="utf-8") as f:
         f.write("\n".join(search_lines))
 
-    tool_lines = []
+    instance2tool = {}
     for instance in instance_dirs:
-        instance_dict = {"instance" : instance}
-        steps = locate_tool_use(instance)
-        instance_dict.update(steps)
-        tool_lines.append(instance_dict)
+        instance2tool[instance] = locate_tool_use(instance)
     with open("locate_tool_use.log", "w", encoding="utf-8") as fh:
-        json.dump(tool_lines, fh, indent=2)
+        json.dump(instance2tool, fh, indent=2)
 
 if __name__ == "__main__":
     main()

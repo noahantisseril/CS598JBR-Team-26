@@ -1,225 +1,171 @@
-[
-  {
-    "instance": "20250511_sweagent_lm_32b@django__django-12308",
+{
+  "20250511_sweagent_lm_32b@django__django-12308": {
     "find": 1,
-    "grep": 9,
+    "grep": 10,
     "view": 25,
-    "str_replace": 30,
-    "ls": 23,
     "create": 1,
     "cd": 5,
+    "str_replace": 4,
     "submit": 1
   },
-  {
-    "instance": "20250511_sweagent_lm_32b@django__django-12774",
+  "20250511_sweagent_lm_32b@django__django-12774": {
     "find": 2,
     "grep": 5,
     "view": 11,
-    "str_replace": 21,
-    "ls": 23,
     "create": 2,
     "cd": 7,
-    "cat": 1,
+    "str_replace": 8,
     "submit": 1
   },
-  {
-    "instance": "20250511_sweagent_lm_32b@pylint-dev__pylint-8898",
+  "20250511_sweagent_lm_32b@pylint-dev__pylint-8898": {
     "view": 21,
-    "str_replace": 51,
-    "ls": 18,
+    "str_replace": 29,
     "create": 1,
-    "find": 6
+    "find": 2
   },
-  {
-    "instance": "20250522_sweagent_claude-4-sonnet-20250514@astropy__astropy-13033",
+  "20250522_sweagent_claude-4-sonnet-20250514@astropy__astropy-13033": {
     "view": 11,
-    "str_replace": 25,
-    "create": 11,
+    "create": 10,
     "cd": 47,
-    "ls": 8,
+    "str_replace": 4,
     "grep": 1,
     "submit": 2
   },
-  {
-    "instance": "20250522_sweagent_claude-4-sonnet-20250514@astropy__astropy-14182",
+  "20250522_sweagent_claude-4-sonnet-20250514@astropy__astropy-14182": {
     "view": 12,
-    "str_replace": 25,
     "grep": 13,
     "create": 10,
     "cd": 73,
-    "ls": 1,
-    "submit": 2,
-    "cat": 3
-  },
-  {
-    "instance": "20250522_sweagent_claude-4-sonnet-20250514@astropy__astropy-7606",
-    "view": 8,
-    "str_replace": 16,
-    "grep": 10,
-    "cd": 30,
-    "create": 7,
-    "ls": 9,
+    "str_replace": 3,
     "submit": 2
   },
-  {
-    "instance": "20250522_sweagent_claude-4-sonnet-20250514@django__django-11477",
-    "view": 27,
-    "str_replace": 32,
-    "ls": 36,
+  "20250522_sweagent_claude-4-sonnet-20250514@astropy__astropy-7606": {
+    "view": 8,
+    "cd": 30,
+    "grep": 10,
+    "create": 7,
+    "str_replace": 1,
+    "submit": 2,
+    "ls": 1
+  },
+  "20250522_sweagent_claude-4-sonnet-20250514@django__django-11477": {
+    "view": 19,
     "find": 7,
     "grep": 11,
     "create": 6,
-    "insert": 8,
     "cd": 43,
+    "str_replace": 7,
     "submit": 2
   },
-  {
-    "instance": "20250522_sweagent_claude-4-sonnet-20250514@django__django-12325",
+  "20250522_sweagent_claude-4-sonnet-20250514@django__django-12325": {
     "view": 16,
-    "str_replace": 35,
-    "ls": 34,
-    "create": 10,
+    "create": 7,
     "cd": 32,
     "grep": 5,
-    "cat": 4,
+    "str_replace": 12,
     "submit": 2
   },
-  {
-    "instance": "20250522_sweagent_claude-4-sonnet-20250514@django__django-14122",
+  "20250522_sweagent_claude-4-sonnet-20250514@django__django-14122": {
     "view": 39,
-    "str_replace": 71,
-    "ls": 62,
     "find": 4,
     "grep": 19,
-    "create": 11,
+    "create": 10,
     "cd": 26,
-    "insert": 8,
-    "cat": 2
+    "str_replace": 22
   },
-  {
-    "instance": "20250522_sweagent_claude-4-sonnet-20250514@django__django-14155",
+  "20250522_sweagent_claude-4-sonnet-20250514@django__django-14155": {
     "find": 5,
-    "grep": 7,
-    "view": 18,
-    "str_replace": 21,
-    "ls": 23,
+    "grep": 12,
+    "view": 8,
     "create": 8,
     "cd": 25,
+    "str_replace": 5,
     "submit": 2
   },
-  {
-    "instance": "20250522_sweagent_claude-4-sonnet-20250514@django__django-15098",
-    "view": 42,
-    "str_replace": 46,
-    "ls": 71,
+  "20250522_sweagent_claude-4-sonnet-20250514@django__django-15098": {
+    "view": 27,
     "grep": 26,
     "create": 10,
     "cd": 39,
     "find": 5,
-    "insert": 1
+    "str_replace": 9
   },
-  {
-    "instance": "20250522_sweagent_claude-4-sonnet-20250514@django__django-15732",
+  "20250522_sweagent_claude-4-sonnet-20250514@django__django-15732": {
     "view": 17,
-    "str_replace": 34,
-    "ls": 17,
     "grep": 4,
-    "create": 10,
+    "create": 7,
     "cd": 25,
-    "cat": 3,
+    "str_replace": 10,
     "submit": 2
   },
-  {
-    "instance": "20250522_sweagent_claude-4-sonnet-20250514@matplotlib__matplotlib-22871",
+  "20250522_sweagent_claude-4-sonnet-20250514@matplotlib__matplotlib-22871": {
     "find": 1,
     "grep": 3,
     "view": 9,
-    "str_replace": 20,
     "create": 9,
-    "cat": 10,
-    "ls": 14,
     "cd": 20,
+    "str_replace": 2,
     "submit": 2
   },
-  {
-    "instance": "20250522_sweagent_claude-4-sonnet-20250514@matplotlib__matplotlib-24149",
+  "20250522_sweagent_claude-4-sonnet-20250514@matplotlib__matplotlib-24149": {
     "view": 17,
-    "str_replace": 27,
     "create": 6,
     "cd": 32,
-    "grep": 10,
-    "ls": 6,
-    "cat": 4,
+    "grep": 11,
+    "str_replace": 4,
     "submit": 2
   },
-  {
-    "instance": "20250522_sweagent_claude-4-sonnet-20250514@matplotlib__matplotlib-25287",
+  "20250522_sweagent_claude-4-sonnet-20250514@matplotlib__matplotlib-25287": {
     "view": 7,
-    "str_replace": 21,
-    "grep": 11,
-    "cd": 39,
+    "cd": 32,
+    "grep": 12,
     "create": 11,
-    "ls": 4,
+    "str_replace": 3,
     "find": 1,
     "submit": 2
   },
-  {
-    "instance": "20250522_sweagent_claude-4-sonnet-20250514@psf__requests-5414",
+  "20250522_sweagent_claude-4-sonnet-20250514@psf__requests-5414": {
     "view": 20,
-    "str_replace": 36,
     "create": 12,
     "cd": 37,
-    "ls": 13,
     "grep": 14,
-    "cat": 14,
+    "find": 1,
+    "str_replace": 4,
+    "submit": 2
+  },
+  "20250522_sweagent_claude-4-sonnet-20250514@sphinx-doc__sphinx-10435": {
+    "view": 8,
+    "cd": 27,
+    "grep": 2,
+    "create": 13,
+    "str_replace": 3,
     "find": 1,
     "submit": 2
   },
-  {
-    "instance": "20250522_sweagent_claude-4-sonnet-20250514@sphinx-doc__sphinx-10435",
-    "view": 8,
-    "str_replace": 24,
-    "grep": 2,
-    "cd": 27,
-    "create": 13,
-    "find": 3,
-    "ls": 8,
-    "cat": 3,
-    "submit": 2
-  },
-  {
-    "instance": "20250522_sweagent_claude-4-sonnet-20250514@sympy__sympy-12489",
+  "20250522_sweagent_claude-4-sonnet-20250514@sympy__sympy-12489": {
     "view": 26,
-    "str_replace": 75,
-    "grep": 12,
-    "create": 5,
+    "grep": 14,
+    "create": 4,
     "cd": 29,
-    "ls": 22,
-    "cat": 1,
+    "str_replace": 45,
     "submit": 2
   },
-  {
-    "instance": "20250522_sweagent_claude-4-sonnet-20250514@sympy__sympy-18199",
+  "20250522_sweagent_claude-4-sonnet-20250514@sympy__sympy-18199": {
     "view": 12,
-    "str_replace": 26,
     "grep": 8,
     "create": 12,
-    "ls": 12,
-    "cd": 27,
-    "cat": 5,
+    "cd": 26,
+    "str_replace": 2,
     "find": 1,
     "submit": 2
   },
-  {
-    "instance": "20250522_sweagent_claude-4-sonnet-20250514@sympy__sympy-19040",
+  "20250522_sweagent_claude-4-sonnet-20250514@sympy__sympy-19040": {
     "view": 20,
-    "str_replace": 39,
     "create": 11,
-    "ls": 51,
     "cd": 43,
     "find": 3,
     "grep": 13,
-    "cat": 1,
+    "str_replace": 8,
     "submit": 2
   }
-]
+}
