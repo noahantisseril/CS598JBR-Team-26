@@ -40,7 +40,7 @@ def locate_reproduction_code(instance_id):
         pattern = re.compile(r".*/[^/]*test[^/]*\.py$")
         if action_create_flag and filename:
             if contains_words_in_list(filename) or pattern.match(filename) or contains_words_in_list(thought):
-                reproduction_steps.append(idx)
+                reproduction_steps.append(idx+1)
 
     return reproduction_steps
 
@@ -62,13 +62,13 @@ def locate_search(instance_id):
                 use_multi = True
                 continue
             if use_multi and action_val == "view":
-                results.append(idx)
+                results.append(idx+1)
                 break
             else:
                 use_multi = False
                 
             if any(k == action_val for k in search_keywords):
-                results.append(idx)
+                results.append(idx+1)
                 break
 
     return results

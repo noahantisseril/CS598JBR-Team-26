@@ -10,8 +10,8 @@
   "2.2": "",
   "Edit the Code": "",
   "Test changes on the reproduction code": "",
-  "4.1": "",
-  "4.2": "",
+  "4.1": "YES",
+  "4.2": "The fix passes all reproduction tests.",
   "Tool-use analysis": {
     "view": 19,
     "find": 7,
