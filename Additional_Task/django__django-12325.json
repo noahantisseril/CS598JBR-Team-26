@@ -16,8 +16,11 @@
     "view": 16,
     "create": 7,
     "cd": 32,
+    "python": 22,
     "grep": 5,
     "str_replace": 12,
-    "submit": 2
+    "submit": 2,
+    "rm": 2,
+    "git": 1
   }
 }

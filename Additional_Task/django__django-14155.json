@@ -18,7 +18,9 @@
     "view": 8,
     "create": 8,
     "cd": 25,
+    "python": 21,
     "str_replace": 5,
-    "submit": 2
+    "submit": 2,
+    "rm": 1
   }
 }

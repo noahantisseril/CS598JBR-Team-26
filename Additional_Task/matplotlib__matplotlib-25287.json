@@ -17,8 +17,10 @@
     "cd": 32,
     "grep": 12,
     "create": 11,
+    "python": 13,
     "str_replace": 3,
     "find": 1,
-    "submit": 2
+    "submit": 2,
+    "rm": 2
   }
 }

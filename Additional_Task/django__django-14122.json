@@ -18,6 +18,7 @@
     "grep": 19,
     "create": 10,
     "cd": 26,
+    "python": 24,
     "str_replace": 22
   }
 }
