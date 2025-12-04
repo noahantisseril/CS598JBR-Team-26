@@ -14,7 +14,7 @@ def load_trajectory_file(instance_id):
     obj = json.loads(text)
     return obj["trajectory"]
 
-reproduction_keywords = ["reproduce", "reproduction", "debug", "debugging", "verify", "test"]
+reproduction_keywords = ["reproduce", "reproduction", "verify"]
 
 def contains_words_in_list(text):
     t = (text or "").lower()
@@ -37,8 +37,9 @@ def locate_reproduction_code(instance_id):
 
         action_create_flag = "str_replace_editor create" in str(action).lower()
         filename = extract_filename(action)
+        pattern = re.compile(r".*/[^/]*test[^/]*\.py$")
         if action_create_flag and filename:
-            if contains_words_in_list(filename) or contains_words_in_list(thought):
+            if contains_words_in_list(filename) or pattern.match(filename) or contains_words_in_list(thought):
                 reproduction_steps.append(idx)
 
     return reproduction_steps
