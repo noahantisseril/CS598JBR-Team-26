@@ -79,9 +79,9 @@ def locate_tool_use(instance_id):
     for step in steps:
         action = step.get("action", None).split()
         possible_args = ["view", "create", "str_replace", "insert", "undo_edit"]
-        bash_args = ["find", "grep", "cat", "ls", "cd"]
+        bash_args = ["find", "grep", "cat", "ls", "cd", "rm", "git"]
         use_multi = False
-        for word in action:
+        for i, word in enumerate(action):
             if word == "str_replace_editor":
                 use_multi = True
                 continue
@@ -89,6 +89,9 @@ def locate_tool_use(instance_id):
                 tool_counts[word] = tool_counts.get(word, 0) + 1
 
             if word in bash_args + ["submit"]:
+                tool_counts[word] = tool_counts.get(word, 0) + 1
+            
+            if word in ["python", "python3"] and i < len(action) - 1 and action[i + 1].endswith(".py"):
                 tool_counts[word] = tool_counts.get(word, 0) + 1
             use_multi = False
 
