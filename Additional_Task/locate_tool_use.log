@@ -1,5 +1,5 @@
 {
-  "20250511_sweagent_lm_32b@django__django-12308": {
+  "django__django-12308": {
     "find": 1,
     "grep": 10,
     "view": 25,
@@ -9,7 +9,7 @@
     "str_replace": 4,
     "submit": 1
   },
-  "20250511_sweagent_lm_32b@django__django-12774": {
+  "django__django-12774": {
     "find": 2,
     "grep": 5,
     "view": 11,
@@ -19,14 +19,14 @@
     "str_replace": 8,
     "submit": 1
   },
-  "20250511_sweagent_lm_32b@pylint-dev__pylint-8898": {
+  "pylint-dev__pylint-8898": {
     "view": 21,
     "str_replace": 29,
     "create": 1,
     "python": 24,
     "find": 2
   },
-  "20250522_sweagent_claude-4-sonnet-20250514@astropy__astropy-13033": {
+  "astropy__astropy-13033": {
     "view": 11,
     "create": 10,
     "cd": 47,
@@ -37,7 +37,7 @@
     "rm": 2,
     "git": 21
   },
-  "20250522_sweagent_claude-4-sonnet-20250514@astropy__astropy-14182": {
+  "astropy__astropy-14182": {
     "view": 12,
     "grep": 13,
     "create": 10,
@@ -48,7 +48,7 @@
     "rm": 2,
     "git": 36
   },
-  "20250522_sweagent_claude-4-sonnet-20250514@astropy__astropy-7606": {
+  "astropy__astropy-7606": {
     "view": 8,
     "cd": 30,
     "grep": 10,
@@ -60,7 +60,7 @@
     "ls": 1,
     "git": 1
   },
-  "20250522_sweagent_claude-4-sonnet-20250514@django__django-11477": {
+  "django__django-11477": {
     "view": 19,
     "find": 7,
     "grep": 11,
@@ -72,7 +72,7 @@
     "submit": 2,
     "rm": 2
   },
-  "20250522_sweagent_claude-4-sonnet-20250514@django__django-12325": {
+  "django__django-12325": {
     "view": 16,
     "create": 7,
     "cd": 32,
@@ -83,7 +83,7 @@
     "rm": 2,
     "git": 1
   },
-  "20250522_sweagent_claude-4-sonnet-20250514@django__django-14122": {
+  "django__django-14122": {
     "view": 39,
     "find": 4,
     "grep": 19,
@@ -92,7 +92,7 @@
     "python": 24,
     "str_replace": 22
   },
-  "20250522_sweagent_claude-4-sonnet-20250514@django__django-14155": {
+  "django__django-14155": {
     "find": 5,
     "grep": 12,
     "view": 8,
@@ -103,7 +103,7 @@
     "submit": 2,
     "rm": 1
   },
-  "20250522_sweagent_claude-4-sonnet-20250514@django__django-15098": {
+  "django__django-15098": {
     "view": 27,
     "grep": 26,
     "create": 10,
@@ -112,7 +112,7 @@
     "find": 5,
     "str_replace": 9
   },
-  "20250522_sweagent_claude-4-sonnet-20250514@django__django-15732": {
+  "django__django-15732": {
     "view": 17,
     "grep": 4,
     "create": 7,
@@ -122,7 +122,7 @@
     "submit": 2,
     "rm": 2
   },
-  "20250522_sweagent_claude-4-sonnet-20250514@matplotlib__matplotlib-22871": {
+  "matplotlib__matplotlib-22871": {
     "find": 1,
     "grep": 3,
     "view": 9,
@@ -133,7 +133,7 @@
     "submit": 2,
     "rm": 2
   },
-  "20250522_sweagent_claude-4-sonnet-20250514@matplotlib__matplotlib-24149": {
+  "matplotlib__matplotlib-24149": {
     "view": 17,
     "create": 6,
     "cd": 32,
@@ -143,7 +143,7 @@
     "submit": 2,
     "rm": 1
   },
-  "20250522_sweagent_claude-4-sonnet-20250514@matplotlib__matplotlib-25287": {
+  "matplotlib__matplotlib-25287": {
     "view": 7,
     "cd": 32,
     "grep": 12,
@@ -154,7 +154,7 @@
     "submit": 2,
     "rm": 2
   },
-  "20250522_sweagent_claude-4-sonnet-20250514@psf__requests-5414": {
+  "psf__requests-5414": {
     "view": 20,
     "create": 12,
     "cd": 37,
@@ -165,7 +165,7 @@
     "submit": 2,
     "rm": 1
   },
-  "20250522_sweagent_claude-4-sonnet-20250514@sphinx-doc__sphinx-10435": {
+  "sphinx-doc__sphinx-10435": {
     "view": 8,
     "cd": 27,
     "grep": 2,
@@ -177,7 +177,7 @@
     "submit": 2,
     "git": 1
   },
-  "20250522_sweagent_claude-4-sonnet-20250514@sympy__sympy-12489": {
+  "sympy__sympy-12489": {
     "view": 26,
     "grep": 14,
     "create": 4,
@@ -187,7 +187,7 @@
     "submit": 2,
     "rm": 1
   },
-  "20250522_sweagent_claude-4-sonnet-20250514@sympy__sympy-18199": {
+  "sympy__sympy-18199": {
     "view": 12,
     "grep": 8,
     "create": 12,
@@ -198,7 +198,7 @@
     "submit": 2,
     "rm": 1
   },
-  "20250522_sweagent_claude-4-sonnet-20250514@sympy__sympy-19040": {
+  "sympy__sympy-19040": {
     "view": 20,
     "create": 11,
     "cd": 43,

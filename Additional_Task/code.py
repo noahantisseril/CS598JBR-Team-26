@@ -104,7 +104,7 @@ def main():
 
     for instance in instance_dirs:
         steps = locate_reproduction_code(instance)
-        reproduction_lines.append(f"{instance}: {steps}")
+        reproduction_lines.append(f"{instance.split("@")[1]}: {steps}")
 
     with open("locate_reproduction_code.log", "w", encoding="utf-8") as f:
         f.write("\n".join(reproduction_lines))
@@ -113,14 +113,14 @@ def main():
     search_lines = []
     for instance in instance_dirs:
         steps = locate_search(instance)
-        search_lines.append(f"{instance}: {steps}")
+        search_lines.append(f"{instance.split("@")[1]}: {steps}")
 
     with open("locate_search.log", "w", encoding="utf-8") as f:
         f.write("\n".join(search_lines))
 
     instance2tool = {}
     for instance in instance_dirs:
-        instance2tool[instance] = locate_tool_use(instance)
+        instance2tool[instance.split("@")[1]] = locate_tool_use(instance)
     with open("locate_tool_use.log", "w", encoding="utf-8") as fh:
         json.dump(instance2tool, fh, indent=2)
 
