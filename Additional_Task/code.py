@@ -80,7 +80,7 @@ def locate_tool_use(instance_id):
     for step in steps:
         action = step.get("action", None).split()
         possible_args = ["view", "create", "str_replace", "insert", "undo_edit"]
-        bash_args = ["find", "grep", "cat", "ls", "cd", "rm", "git"]
+        bash_args = ["find", "grep", "cat", "ls", "cd", "rm", "git", "pip"]
         use_multi = False
         for i, word in enumerate(action):
             if word == "str_replace_editor":
